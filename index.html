@@ -1,0 +1,1071 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>Planilla de Chasis</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@600;700;800&family=Archivo:wght@400;500;600&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: planilla de ingeniero de pista — banda de cabecera con piano rojo/blanco, pestañas fijas, cada vista como hoja técnica con el kart dibujado a escala */
+:root{
+  --bg:#eceff2; --surface:#ffffff; --sunk:#f5f7f9; --ink:#15191e; --muted:#58616c; --line:#d2d8df;
+  --accent:#2352c2; --accent-ink:#ffffff; --accent-soft:#e3eafb;
+  --good:#1b8a4b; --same:#a87c00; --bad:#c8352a; --best:#7a3be0;
+  --kerbA:#c8352a; --kerbB:#ffffff; --head:#15191e; --head-ink:#f2f4f6;
+  --tire:#24272c; --tread:#41464e; --tube:#a8333a; --tray:#dde2e8; --bodywork:#e8ecf1; --bodyline:#9aa5b2;
+  --seat:#2b2f35; --seat2:#454b54; --metal:#8e98a4; --hub:#5f6976; --engine:#7c8592; --ghost:#5d6672;
+  --f-display:"Saira Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"Archivo",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#111418; --surface:#1a1e24; --sunk:#151920; --ink:#e7eaee; --muted:#97a1ad; --line:#2b323b;
+  --accent:#7aa2ff; --accent-ink:#0c1220; --accent-soft:#1d2840;
+  --good:#3fcf7f; --same:#e2b52e; --bad:#f2675d; --best:#b58dff;
+  --kerbA:#d9443a; --kerbB:#e9ecef; --head:#0b0d10; --head-ink:#e7eaee;
+  --tire:#07080a; --tread:#2c3138; --tube:#cf4b51; --tray:#272d35; --bodywork:#323a45; --bodyline:#566170;
+  --seat:#0c0e11; --seat2:#262b33; --metal:#a3adb9; --hub:#7d8794; --engine:#5d6673; --ghost:#b4bdc8; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#111418; --surface:#1a1e24; --sunk:#151920; --ink:#e7eaee; --muted:#97a1ad; --line:#2b323b;
+  --accent:#7aa2ff; --accent-ink:#0c1220; --accent-soft:#1d2840;
+  --good:#3fcf7f; --same:#e2b52e; --bad:#f2675d; --best:#b58dff;
+  --kerbA:#d9443a; --kerbB:#e9ecef; --head:#0b0d10; --head-ink:#e7eaee;
+  --tire:#07080a; --tread:#2c3138; --tube:#cf4b51; --tray:#272d35; --bodywork:#323a45; --bodyline:#566170;
+  --seat:#0c0e11; --seat2:#262b33; --metal:#a3adb9; --hub:#7d8794; --engine:#5d6673; --ghost:#b4bdc8; color-scheme:dark }
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--head)}
+.gut{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.in{max-width:1180px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:.01em}
+.lbl{font-size:11.5px;text-transform:uppercase;letter-spacing:.09em;color:var(--muted);font-weight:600}
+button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+header{background:var(--head);color:var(--head-ink)}
+header .in{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-block:22px 16px}
+header h1{font-size:clamp(30px,6vw,44px);font-weight:800;line-height:.95;text-transform:uppercase;font-style:italic}
+header p{margin:6px 0 0;color:color-mix(in srgb,var(--head-ink) 70%,transparent);font-size:14px;max-width:50ch}
+.store{font-size:12.5px;display:flex;align-items:center;gap:8px;color:color-mix(in srgb,var(--head-ink) 75%,transparent)}
+.store i{width:8px;height:8px;border-radius:50%;background:var(--same);display:inline-block}
+.store.cloud i{background:var(--good)}
+.kerb{height:7px;background:repeating-linear-gradient(90deg,var(--kerbA) 0 22px,var(--kerbB) 22px 44px)}
+
+nav.tabs{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:var(--bg);border-bottom:1px solid var(--line)}
+nav.tabs .in{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+nav.tabs button{background:none;border:0;padding:13px 12px 11px;font-family:var(--f-display);font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;color:var(--muted);border-bottom:3px solid transparent;cursor:pointer;white-space:nowrap}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+nav.tabs button .n{font-family:var(--f-mono);font-size:12px;margin-left:6px;color:var(--muted)}
+
+main{padding-block:24px 64px}
+section[role="tabpanel"]{display:grid;gap:20px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;min-width:0}
+.panel h2{font-size:24px;text-transform:uppercase;font-weight:700}
+.sub{color:var(--muted);margin:4px 0 0;max-width:66ch}
+
+/* Dibujo del kart */
+.kdraw{display:block;width:100%;height:auto}
+.k-tire{fill:var(--tire)}
+.k-tread{stroke:var(--tread);stroke-width:7}
+.k-rim{fill:var(--metal)}
+.k-tube{fill:none;stroke:var(--tube);stroke-width:30;stroke-linecap:round;stroke-linejoin:round}
+.k-tube.thin{stroke-width:22}
+.k-tray{fill:var(--tray)}
+.k-body{fill:var(--bodywork);stroke:var(--bodyline);stroke-width:6;stroke-linejoin:round}
+.k-seat{fill:var(--seat)}
+.k-seatin{fill:var(--seat2)}
+.k-metal{fill:var(--metal)}
+.k-engine{fill:var(--engine);stroke:var(--hub);stroke-width:6}
+.k-hub{fill:var(--hub)}
+.k-bar1{fill:var(--kerbB);stroke:var(--bodyline);stroke-width:6}
+.k-bar2{fill:var(--hub);stroke:var(--seat);stroke-width:4}
+.k-bar3{fill:var(--metal);stroke:var(--seat);stroke-width:4}
+.k-loose{fill:none;stroke:var(--metal);stroke-width:8;stroke-dasharray:14 10}
+.k-axle{stroke:var(--metal);stroke-width:44;stroke-linecap:round}
+.k-rod{stroke:var(--metal);stroke-width:14;stroke-linecap:round}
+.k-arm{stroke:var(--metal);stroke-width:22;stroke-linecap:round}
+.k-stub{stroke:var(--metal);stroke-width:34}
+.k-col{stroke:var(--metal);stroke-width:26;stroke-linecap:round}
+.k-chain{stroke:var(--hub);stroke-width:12;stroke-dasharray:10 8}
+.k-kp{fill:var(--metal);stroke:var(--tube);stroke-width:10}
+.k-wheel{fill:none;stroke:var(--seat);stroke-width:22}
+.k-ghost{fill:none;stroke:var(--ghost);stroke-width:8;stroke-dasharray:26 16}
+.k-ghostline{fill:none;stroke:var(--ghost);stroke-width:12;stroke-dasharray:26 16}
+.k-dim{stroke:var(--muted);stroke-width:5}
+.k-dimt{font-family:var(--f-mono);font-size:52px;fill:var(--muted);font-weight:500}
+.k-dimt.chg{fill:var(--accent);font-weight:700}
+.k-ground{stroke:var(--line);stroke-width:8}
+.hl .k-tire,.hl .k-hub,.hl .k-seat,.hl .k-kp,.hl .k-metal,.hl .k-body{stroke:var(--accent);stroke-width:18}
+.hl .k-tube,.hl .k-axle,.hl .k-rod,.hl .k-arm,.hl .k-stub,.hl .k-col{stroke:var(--accent)}
+.figgrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:14px;align-items:start}
+.figgrid figure{margin:0;display:grid;gap:4px}
+.views{display:grid;gap:14px}
+.figcap{font-size:12.5px;color:var(--muted)}
+
+/* Diagnóstico */
+.diag{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:860px){.diag{grid-template-columns:minmax(0,1fr)}}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;cursor:pointer;font-size:14px}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.symgroup{display:grid;gap:4px;margin-top:14px}
+.sym{display:block;width:100%;text-align:left;background:none;border:1px solid transparent;border-radius:8px;padding:9px 10px;cursor:pointer;font-size:14.5px;line-height:1.35}
+.sym:hover{background:var(--sunk)}
+.sym[aria-pressed="true"]{background:var(--accent-soft);border-color:var(--accent)}
+.reshead h2{font-size:28px}
+.prev{margin-top:14px}
+.prevcap{display:grid;gap:4px;margin-top:10px;font-size:14px}
+.prevcap .c{font-family:var(--f-mono);font-size:13px}
+.prevcap .c b{color:var(--accent)}
+.recs{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:10px;counter-reset:r}
+.rec{display:grid;grid-template-columns:34px minmax(0,1fr);gap:12px;padding:14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);cursor:pointer}
+.rec::before{counter-increment:r;content:counter(r);font-family:var(--f-display);font-weight:800;font-size:28px;line-height:1;color:var(--muted);font-style:italic}
+.rec[aria-current="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.rec[aria-current="true"]::before{color:var(--accent)}
+.rec h3{font-size:20px;font-weight:700;line-height:1.15}
+.rec .p{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.rec p{margin:6px 0 0;max-width:64ch}
+.rec .amt{font-family:var(--f-mono);font-size:13px;background:var(--sunk);border-radius:6px;padding:2px 7px;display:inline-block;margin-top:8px}
+.rec .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:10px}
+.hist{font-size:12.5px;border-radius:999px;padding:3px 10px;border:1px solid currentColor;font-weight:600}
+.hist.g{color:var(--good)} .hist.b{color:var(--bad)} .hist.s{color:var(--same)}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 14px;cursor:pointer;font-weight:600;font-size:14px}
+.btn:hover{border-color:var(--ink)}
+.btn[disabled]{opacity:.5;cursor:default}
+.btn.pri{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.sm{padding:5px 10px;font-size:13px}
+.btn.danger{color:var(--bad)}
+.note{border-left:3px solid var(--same);padding:10px 14px;background:var(--sunk);border-radius:0 8px 8px 0;font-size:14px}
+.note b{font-weight:600}
+.rule{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--muted);margin-top:14px}
+
+/* Simulador */
+.sim{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:22px;align-items:start;margin-top:14px}
+.simfig{position:sticky;top:64px;background:var(--surface)}
+@media (max-width:860px){
+  .sim{grid-template-columns:minmax(0,1fr)}
+  .simfig{top:48px;z-index:3;padding-block:8px;border-bottom:1px solid var(--line);box-shadow:0 8px 12px -10px rgba(0,0,0,.25)}
+  .simfig .figgrid{grid-template-columns:minmax(0,.75fr) minmax(0,1fr)}
+  .simfig .figcap,.simfig .lgd{display:none}
+}
+.sgroup + .sgroup{margin-top:18px;padding-top:14px;border-top:1px dashed var(--line)}
+.sgroup h3{font-size:18px;text-transform:uppercase;font-weight:700;margin-bottom:6px}
+.sl{display:grid;gap:2px;padding:8px 0}
+.sl .top{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.sl label{font-weight:600;font-size:14px}
+.sl output{font-family:var(--f-mono);font-size:13.5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.sl.chg output{color:var(--accent);font-weight:700}
+.sl .h{font-size:12.5px;color:var(--muted)}
+.sl .was{font-size:12px;color:var(--muted);font-family:var(--f-mono)}
+input[type=range]{width:100%;accent-color:var(--accent);margin:4px 0}
+.chgbox{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--sunk);margin-bottom:12px}
+.chgbox ul{margin:6px 0 0;padding-left:18px;font-family:var(--f-mono);font-size:13px}
+.chgbox .warn{font-size:13px;color:var(--same);margin-top:6px}
+
+/* Formularios */
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px 16px;margin-top:12px}
+.f{display:grid;gap:4px;min-width:0}
+.f label{font-size:13px;font-weight:600}
+.inp{display:flex;align-items:center;border:1px solid var(--line);border-radius:8px;background:var(--sunk);overflow:hidden}
+.inp:focus-within{border-color:var(--accent)}
+.inp input,.inp select{border:0;background:transparent;padding:9px 10px;width:100%;min-width:0;outline:none}
+.inp .u{font-family:var(--f-mono);font-size:12px;color:var(--muted);padding-right:10px}
+textarea{width:100%;border:1px solid var(--line);border-radius:8px;background:var(--sunk);padding:10px;min-height:80px;resize:vertical}
+textarea:focus{border-color:var(--accent);outline:none}
+.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:16px}
+.saved{font-size:13px;color:var(--good)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.res{display:flex;gap:6px;flex-wrap:wrap}
+.res .chip[aria-pressed="true"][data-v="mejoro"]{background:var(--good);border-color:var(--good);color:var(--surface)}
+.res .chip[aria-pressed="true"][data-v="igual"]{background:var(--same);border-color:var(--same);color:var(--surface)}
+.res .chip[aria-pressed="true"][data-v="empeoro"]{background:var(--bad);border-color:var(--bad);color:var(--surface)}
+.attached{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:13.5px;border:1px solid var(--accent);background:var(--accent-soft);border-radius:8px;padding:8px 12px}
+
+/* Salidas */
+.slist{display:grid;gap:8px}
+.srow{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:12px;align-items:start;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+@media (max-width:560px){.srow{grid-template-columns:minmax(0,1fr) auto}.srow .lap{grid-column:1/-1;order:-1;display:flex;gap:10px;align-items:baseline}}
+.lap b{font-family:var(--f-mono);font-size:18px;font-variant-numeric:tabular-nums;display:block}
+.d{font-family:var(--f-mono);font-size:12.5px;font-variant-numeric:tabular-nums}
+.d.g{color:var(--good)} .d.b{color:var(--bad)}
+.srow .meta{font-size:13px;color:var(--muted)}
+.srow .notes{font-size:13.5px;margin-top:4px;color:var(--muted)}
+.srow .side{display:grid;gap:6px;justify-items:end}
+.pill{font-size:12px;font-weight:700;border-radius:4px;padding:2px 8px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.pill.mejoro{background:var(--good);color:var(--surface)}
+.pill.igual{background:var(--same);color:var(--surface)}
+.pill.empeoro{background:var(--bad);color:var(--surface)}
+.pill.na{border:1px solid var(--line);color:var(--muted)}
+.tag{font-size:12px;border:1px solid var(--line);border-radius:4px;padding:1px 6px;color:var(--muted)}
+.tag.mc{border-color:var(--accent);color:var(--accent);cursor:pointer;background:none}
+.chart{overflow-x:auto}
+.chart svg{display:block;width:100%;min-width:440px;height:auto}
+.chart .ax{stroke:var(--line);stroke-width:1}
+.chart .ln{fill:none;stroke:var(--accent);stroke-width:2}
+.chart .ln2{fill:none;stroke:var(--muted);stroke-width:1.6;stroke-dasharray:5 4}
+.chart .ar{fill:var(--accent-soft);stroke:none}
+.chart text{font-family:var(--f-mono);font-size:11px;fill:var(--muted)}
+.chart .cl{fill:var(--ink);font-weight:700}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.empty{border:1px dashed var(--line);border-radius:10px;padding:24px;text-align:center;color:var(--muted)}
+.empty b{display:block;color:var(--ink);font-family:var(--f-display);font-size:22px;text-transform:uppercase;margin-bottom:4px}
+.confirm{display:flex;gap:6px;align-items:center;font-size:13px;flex-wrap:wrap;justify-content:flex-end}
+
+/* Telemetría */
+.steps{margin:10px 0 0;padding-left:22px;display:grid;gap:6px;max-width:72ch}
+.drop{border:2px dashed var(--line);border-radius:10px;padding:22px;text-align:center;background:var(--sunk);margin-top:14px}
+.drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.drop input{display:block;margin:10px auto 0;max-width:100%}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin-top:12px}
+.stat{border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.stat b{display:block;font-family:var(--f-mono);font-size:18px;font-variant-numeric:tabular-nums}
+.laps{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.laps span{font-family:var(--f-mono);font-size:12.5px;border:1px solid var(--line);border-radius:4px;padding:2px 6px;font-variant-numeric:tabular-nums}
+.laps span.best{border-color:var(--best);color:var(--best);font-weight:700}
+.laps span.out{opacity:.5}
+.tbl{overflow-x:auto;margin-top:12px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:6px 10px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+th{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:600}
+td{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.err{color:var(--bad);font-size:14px;margin-top:10px}
+
+.answer{white-space:pre-wrap;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:16px;min-height:120px;font-size:15px;line-height:1.6;max-width:80ch;overflow-wrap:anywhere}
+.answer.wait{color:var(--muted);font-style:italic}
+
+@media (prefers-reduced-motion: reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+
+<header>
+  <div class="in gut">
+    <div>
+      <h1>Planilla de Chasis</h1>
+      <p>Diagnóstico, simulador de setup, registro de salidas y telemetría del MyChron. Cuantas más salidas cargues, mejor se ordenan las recomendaciones para tu kart.</p>
+    </div>
+    <div class="store" id="store"><i></i><span>Guardando en este navegador</span></div>
+  </div>
+  <div class="kerb"></div>
+</header>
+
+<nav class="tabs" aria-label="Secciones">
+  <div class="in gut" role="tablist">
+    <button role="tab" id="t-diagnostico" data-tab="diagnostico" aria-selected="true">Diagnóstico</button>
+    <button role="tab" id="t-setup" data-tab="setup" aria-selected="false">Setup</button>
+    <button role="tab" id="t-salidas" data-tab="salidas" aria-selected="false">Salidas<span class="n" id="nSal">0</span></button>
+    <button role="tab" id="t-telemetria" data-tab="telemetria" aria-selected="false">Telemetría</button>
+    <button role="tab" id="t-ingeniero" data-tab="ingeniero" aria-selected="false">Ingeniero</button>
+  </div>
+</nav>
+
+<main class="gut"><div class="in">
+
+<!-- DIAGNÓSTICO -->
+<section role="tabpanel" id="p-diagnostico">
+  <div class="diag">
+    <aside class="panel">
+      <div class="lbl">Condición de pista</div>
+      <div class="seg" id="condSeg" style="margin-top:8px"></div>
+      <div id="symList"></div>
+    </aside>
+    <div style="min-width:0">
+      <div class="reshead">
+        <div class="lbl" id="symPhase"></div>
+        <h2 id="symTitle"></h2>
+        <p class="sub" id="symDesc"></p>
+      </div>
+      <div id="condNote"></div>
+      <div class="panel prev">
+        <div class="figgrid">
+          <figure><div id="dgTop"></div></figure>
+          <div class="views">
+            <figure><figcaption class="lbl">Vista lateral</figcaption><div id="dgSide"></div></figure>
+            <figure><figcaption class="lbl">Vista frontal</figcaption><div id="dgFront"></div></figure>
+          </div>
+        </div>
+        <div class="prevcap" id="prevCap"></div>
+      </div>
+      <ol class="recs" id="recs"></ol>
+      <div class="rule"><span class="lbl" style="flex:none">Regla</span><span>Un solo cambio por salida. Si cambiás dos cosas a la vez no vas a saber cuál funcionó, y la app tampoco.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SETUP / SIMULADOR -->
+<section role="tabpanel" id="p-setup" hidden>
+  <div class="panel">
+    <h2>Simulador de setup</h2>
+    <p class="sub">Mové las barras y mirá cómo cambia el kart. La línea punteada es el setup guardado. Los ángulos de convergencia, camber y las alturas están exagerados en el dibujo para que se vean. Las posiciones dependen de cada marca de chasis: usá la escala que te sirva y mantenela siempre igual.</p>
+    <div class="sim">
+      <div class="simfig">
+        <div class="figgrid">
+          <figure><div id="smTop"></div><figcaption class="figcap">Vista superior</figcaption></figure>
+          <div class="views">
+            <figure><figcaption class="lbl">Vista lateral</figcaption><div id="smSide"></div></figure>
+            <figure><figcaption class="lbl">Vista frontal</figcaption><div id="smFront"></div></figure>
+          </div>
+        </div>
+      </div>
+      <div class="simctl">
+        <div class="chgbox" id="chgBox"></div>
+        <div class="sl"><div class="top"><label for="steer">Girar el volante</label><output id="steerOut">0°</output></div><input type="range" id="steer" min="0" max="25" step="1" value="0"><span class="h">Solo para ver el efecto del Ackermann y la convergencia. No se guarda.</span></div>
+        <div id="sliders"></div>
+      </div>
+    </div>
+  </div>
+  <div class="panel">
+    <h2>Datos del kart</h2>
+    <div class="fgrid" id="textFields"></div>
+    <div class="f" style="margin-top:12px"><label for="u_notas">Notas del setup</label><textarea id="u_notas" placeholder="ej. llantas de magnesio, rodamientos nuevos"></textarea></div>
+    <div class="actions"><button class="btn pri" type="button" id="saveText">Guardar setup</button><span class="saved" id="setupSaved"></span></div>
+  </div>
+</section>
+
+<!-- SALIDAS -->
+<section role="tabpanel" id="p-salidas" hidden>
+  <div class="panel" id="formPanel">
+    <h2>Nueva salida</h2>
+    <p class="sub">Completala al bajar del kart, con la sensación fresca. Se guarda junto con una copia del setup actual.</p>
+    <form id="salForm" autocomplete="off">
+      <div class="fgrid">
+        <div class="f"><label for="s_fecha">Fecha</label><div class="inp"><input id="s_fecha" type="date"></div></div>
+        <div class="f"><label for="s_pista">Pista</label><div class="inp"><input id="s_pista" list="pistasDL" placeholder="ej. Kartódromo de Zárate"></div><datalist id="pistasDL"></datalist></div>
+        <div class="f"><label for="s_cond">Condición</label><div class="inp"><select id="s_cond"><option value="seco">Seco</option><option value="humedo">Húmedo / secándose</option><option value="mojado">Mojado</option></select></div></div>
+        <div class="f"><label for="s_temp">Temperatura de pista</label><div class="inp"><input id="s_temp" inputmode="decimal" placeholder="32"><span class="u">°C</span></div></div>
+        <div class="f"><label for="s_vuelta">Mejor vuelta</label><div class="inp"><input id="s_vuelta" inputmode="decimal" placeholder="52.341 o 1:02.345"><span class="u">s</span></div></div>
+      </div>
+      <div class="f" style="margin-top:14px"><label for="s_csv">Datos del MyChron (opcional)</label><input id="s_csv" type="file" accept=".csv,.txt,text/csv"><div id="s_att"></div></div>
+      <div class="f" style="margin-top:16px"><span class="lbl">Qué sentiste (podés marcar varios)</span><div class="chips" id="s_sint" style="margin-top:6px"></div></div>
+      <div class="fgrid">
+        <div class="f"><label for="s_param">Qué cambiaste respecto a la salida anterior</label><div class="inp"><select id="s_param"></select></div></div>
+        <div class="f"><label for="s_detalle">Detalle del cambio</label><div class="inp"><input id="s_detalle" placeholder="ej. trasera de 1390 a 1380 mm"></div></div>
+      </div>
+      <div class="f" style="margin-top:16px"><span class="lbl">Resultado del cambio</span><div class="res" id="s_res" style="margin-top:6px">
+        <button type="button" class="chip" data-v="mejoro" aria-pressed="false">Mejoró</button>
+        <button type="button" class="chip" data-v="igual" aria-pressed="false">Igual</button>
+        <button type="button" class="chip" data-v="empeoro" aria-pressed="false">Empeoró</button>
+      </div></div>
+      <div class="f" style="margin-top:16px"><label for="s_notas">Notas</label><textarea id="s_notas" placeholder="ej. en la horquilla sigue empujando, en la rápida quedó muy bien"></textarea></div>
+      <div class="actions"><button class="btn pri" type="submit">Guardar salida</button><span class="saved" id="salSaved"></span></div>
+    </form>
+  </div>
+
+  <div class="panel" id="chartPanel" hidden>
+    <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:end">
+      <div><h2>Evolución de la vuelta</h2><p class="sub">Mejor vuelta de cada salida en la pista elegida. Más abajo es más rápido.</p></div>
+      <div class="inp" style="width:auto"><select id="chartPista" aria-label="Pista del gráfico"></select></div>
+    </div>
+    <div class="chart" id="chart"></div>
+    <div class="legend"><span><i style="background:var(--good)"></i>Mejoró</span><span><i style="background:var(--same)"></i>Igual</span><span><i style="background:var(--bad)"></i>Empeoró</span><span><i style="background:var(--best)"></i>Récord en la pista</span></div>
+  </div>
+
+  <div>
+    <div class="lbl" style="margin-bottom:8px">Historial</div>
+    <div class="slist" id="slist"></div>
+  </div>
+</section>
+
+<!-- TELEMETRÍA -->
+<section role="tabpanel" id="p-telemetria" hidden>
+  <div class="panel">
+    <h2>Datos del MyChron 5S</h2>
+    <p class="sub">El MyChron no puede mandar datos directo a esta página. El camino es bajar la sesión a la computadora y exportarla como CSV:</p>
+    <ol class="steps">
+      <li>Con el MyChron encendido y conectado por WiFi, bajá la sesión con Race Studio 3 en la PC.</li>
+      <li>Abrí la sesión en el análisis de Race Studio y exportala a CSV. Incluí por lo menos velocidad GPS y RPM; si tenés temperatura de agua o de escape, sumalas.</li>
+      <li>Subí el archivo acá. La página detecta las vueltas por las marcas de baliza, la velocidad mínima en cada curva, la velocidad máxima y el rango de RPM.</li>
+    </ol>
+    <div class="drop" id="drop">
+      <b>Arrastrá el CSV acá</b> o elegilo:
+      <input id="t_csv" type="file" accept=".csv,.txt,text/csv">
+    </div>
+    <div id="teleOut"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Comparar dos salidas</h2>
+    <p class="sub">Superpone la velocidad de la mejor vuelta de cada salida. Si después de un cambio de setup subió la velocidad mínima en las curvas, el cambio funcionó aunque el cronómetro no lo muestre claro.</p>
+    <div id="cmp"></div>
+  </div>
+</section>
+
+<!-- INGENIERO -->
+<section role="tabpanel" id="p-ingeniero" hidden>
+  <div class="panel">
+    <h2>Ingeniero de pista</h2>
+    <p class="sub">Le manda a Claude tu setup actual, tus salidas registradas y el resumen de telemetría del MyChron, y te responde qué probar. Usa tu propia cuenta de Claude; la primera vez te pide permiso.</p>
+    <div class="chips" id="presets" style="margin-top:14px"></div>
+    <div class="f" style="margin-top:12px"><label for="q">Tu pregunta</label><textarea id="q" placeholder="ej. En la curva lenta después de la recta la cola se va al acelerar, ¿qué pruebo primero?"></textarea></div>
+    <div class="actions"><button class="btn pri" id="ask" type="button">Analizar</button><button class="btn" id="stop" type="button" hidden>Parar</button><span class="lbl" id="askInfo"></span></div>
+  </div>
+  <div class="answer wait" id="answer">La respuesta aparece acá.</div>
+  <p class="sub" id="noSample" hidden>El análisis con Claude no está disponible en esta vista. Podés volver al chat donde se creó esta planilla y pedir el análisis ahí: Claude puede leer tus salidas guardadas.</p>
+</section>
+
+</div></main>
+
+<script>
+/* =============== Parámetros del setup =============== */
+const NUM={
+ trochaDel:{n:'Trocha delantera',min:0,max:4,step:0.5,def:2,u:'sep',h:'Separadores entre mangueta y llanta, por lado. Más separadores: trocha más ancha y más agarre adelante en apoyo.'},
+ toe:{n:'Convergencia',min:-3,max:3,step:0.5,def:0,u:'mm',h:'Divergencia: entra más rápido. Convergencia: más estable.'},
+ ackermann:{n:'Ackermann',min:1,max:3,step:1,def:2,labels:['Poco','Medio','Mucho'],h:'Más: la trompa muerde más en curvas cerradas.'},
+ caster:{n:'Caster',min:-3,max:3,step:1,def:0,u:'pos',h:'Más: más rotación y volante más pesado.'},
+ camber:{n:'Camber',min:-3,max:3,step:1,def:0,u:'pos',h:'Negativo: la goma externa apoya mejor en curva.'},
+ alturaDel:{n:'Altura delantera',min:1,max:3,step:1,def:2,labels:['Baja','Media','Alta'],h:'Más alta: más transferencia de peso y agarre adelante.'},
+ barraDel:{n:'Barra delantera',min:0,max:3,step:1,def:0,labels:['Sin barra','Polipropileno (blanda)','Grilón (media)','Hierro (rígida)'],h:'Más rígida: el tren delantero responde más rápido.'},
+ presionDel:{n:'Presión delantera',min:6,max:22,step:0.5,def:10,u:'psi',h:'En frío. Más presión: la goma calienta antes.'},
+ trochaTras:{n:'Trocha trasera',min:1300,max:1400,step:5,def:1390,u:'mm',h:'Más ancha: libera la cola. Más angosta: más agarre atrás.'},
+ bujesTras:{n:'Masas traseras',min:50,max:130,step:5,def:80,u:'mm',h:'Largo de la masa. Más largas: más agarre atrás.'},
+ eje:{n:'Eje',min:1,max:5,step:1,def:3,labels:['Muy blando','Blando','Medio','Duro','Muy duro'],h:'Más blando: más agarre atrás.'},
+ bancada:{n:'Bancada central del eje',min:0,max:2,step:1,def:0,labels:['Ajustada','Floja','Sin bancada'],h:'Aflojarla o sacarla deja flexar más el eje: más agarre atrás. Ajustada: eje más rígido, cola más libre.'},
+ alturaTras:{n:'Altura trasera',min:1,max:3,step:1,def:2,labels:['Baja','Media','Alta'],h:'Más alta: más transferencia de peso y agarre atrás.'},
+ presionTras:{n:'Presión trasera',min:6,max:22,step:0.5,def:11,u:'psi',h:'En frío. Más presión: la goma calienta antes y tiene menos huella.'},
+ asiento:{n:'Asiento',min:-30,max:30,step:5,def:0,u:'mm',h:'Más atrás: más peso sobre la cola.'},
+ tirantes:{n:'Tirantes de asiento',min:0,max:2,step:1,def:1,labels:['Sin tirantes','1 por lado','2 por lado'],h:'Más tirantes: chasis más rígido y más agarre.'}
+};
+const NUM_GROUPS=[['Tren delantero',['trochaDel','toe','ackermann','caster','camber','alturaDel','barraDel','presionDel']],['Tren trasero',['trochaTras','bujesTras','eje','bancada','alturaTras','presionTras']],['Asiento',['asiento','tirantes']]];
+const TEXT_FIELDS=[['chasis','Chasis','ej. Tony Kart Racer 401'],['categoria','Categoría / motor','ej. Rotax Senior'],['neumaticos','Neumáticos','ej. Mojo D5'],['peso','Peso kart + piloto','ej. 160 kg'],['relacion','Relación','ej. 12/80']];
+const PARAMS={
+ trochaDel:{n:'Trocha delantera',z:['fw','king']}, trochaTras:{n:'Trocha trasera',z:['rw','hub']},
+ caster:{n:'Caster',z:['king']}, camber:{n:'Camber',z:['king','fw']},
+ ackermann:{n:'Ackermann',z:['steer']}, toe:{n:'Convergencia',z:['steer','fw']},
+ alturaDel:{n:'Altura delantera',z:['ffront']}, alturaTras:{n:'Altura trasera',z:['frear']},
+ eje:{n:'Dureza del eje',z:['axle']}, bancada:{n:'Bancada central del eje',z:['bearing','axle']}, bujesTras:{n:'Masas traseras',z:['hub']},
+ barraDel:{n:'Barra delantera',z:['bar']},
+ presionDel:{n:'Presión delantera',z:['fw']}, presionTras:{n:'Presión trasera',z:['rw']},
+ asiento:{n:'Asiento',z:['seat']}, tirantes:{n:'Tirantes de asiento',z:['seat']},
+ relacion:{n:'Relación (piñón/corona)',z:['axle']},
+ conduccion:{n:'Manejo',z:[]}, otro:{n:'Otro / varios',z:[]}
+};
+/* Cada recomendación: [parámetro, acción, por qué, cuánto, cambio a simular] */
+const SYMPTOMS=[
+ {id:'sub_ent',f:'Entrada',t:'No dobla al entrar',d:'Girás el volante y la trompa tarda en morder. Subviraje en la entrada.',r:[
+  ['ackermann','Más Ackermann','La rueda delantera interna gira más que la externa y la trompa muerde antes al tirar el volante.','1 posición',{ackermann:1}],
+  ['caster','Más caster','Al girar levanta más la rueda trasera interna y carga la delantera externa. El kart rota antes. También pone más pesado el volante.','1 posición de pastilla',{caster:1}],
+  ['toe','Leve divergencia (puntas hacia afuera)','Respuesta más rápida al primer movimiento del volante. Con mucha divergencia el kart se vuelve nervioso y pierde en recta.','1 a 2 mm en total',{toe:1}],
+  ['barraDel','Poner o endurecer la barra delantera','Más rigidez adelante: la transferencia de peso llega antes y el tren delantero responde más rápido.','Sin barra → polipropileno → grilón → hierro',{barraDel:1}],
+  ['presionDel','Revisar presión delantera','Si las delanteras salen frías, subí presión para que trabajen. Si salen pasadas de temperatura y engrasadas, bajala.','±0,5 psi',{presionDel:0.5}],
+  ['conduccion','Cargar la trompa al entrar','Soltá el freno de a poco mientras empezás a girar. Si soltás de golpe antes de doblar, la trompa queda descargada.','',null]]},
+ {id:'sub_med',f:'Medio de curva',t:'Empuja de trompa en el vértice',d:'Entra bien pero en el medio de la curva se abre y no llega a la cuerda.',r:[
+  ['trochaDel','Ensanchar la trocha delantera','Más palanca adelante: más carga sobre la rueda externa y más agarre en apoyo.','Medio separador por lado',{trochaDel:0.5}],
+  ['trochaTras','Ensanchar la trocha trasera','Si la cola tiene demasiado agarre, el kart no levanta la rueda trasera interna y arrastra el eje. Liberar la cola ayuda a rotar.','10 mm en total',{trochaTras:10}],
+  ['camber','Un poco más de camber negativo','La goma externa apoya mejor cuando el kart está cargado en curva.','1 posición',{camber:-1}],
+  ['caster','Más caster','Más levantamiento de la rueda interna trasera en el medio de la curva.','1 posición de pastilla',{caster:1}],
+  ['alturaDel','Más altura adelante','Un chasis más alto transfiere más peso y le da más agarre al eje delantero.','1 posición de separadores en la mangueta',{alturaDel:1}]]},
+ {id:'sub_sal',f:'Salida',t:'Se abre al acelerar',d:'A la salida el kart sigue derecho y te come pista, sobre todo en curvas lentas.',r:[
+  ['trochaTras','Ensanchar la trocha trasera','Le saca agarre a la cola y el kart rota con el acelerador.','10 mm en total',{trochaTras:10}],
+  ['bujesTras','Masas traseras más cortas','Menos rigidez en la unión eje-rueda: menos agarre atrás.','Un largo menos',{bujesTras:-15}],
+  ['eje','Eje más duro','El eje flexa menos, la rueda interna se libera antes y el kart no se traba.','Un grado más duro',{eje:1}],
+  ['bancada','Ajustar la bancada central del eje','Si la tenés floja o sacada, ajustarla rigidiza el eje y libera la cola.','Floja → ajustada',{bancada:-1}],
+  ['presionTras','Subir presión trasera','Menos huella atrás, menos agarre trasero.','+0,5 psi',{presionTras:0.5}],
+  ['conduccion','Acelerar con el volante más derecho','Si acelerás a fondo con mucho volante, el kart empuja. Esperá a abrir la dirección.','',null]]},
+ {id:'sob_ent',f:'Entrada',t:'Se cruza de cola al frenar o entrar',d:'Al frenar o al tirar el volante la cola se adelanta.',r:[
+  ['ackermann','Menos Ackermann','La trompa muerde menos de golpe y la cola no se desestabiliza.','1 posición',{ackermann:-1}],
+  ['toe','Sacar divergencia (hacia 0 o leve convergencia)','Estabiliza la entrada y suaviza la respuesta del volante.','1 mm en total',{toe:-1}],
+  ['caster','Menos caster','Menos levantamiento de la rueda trasera interna al girar.','1 posición de pastilla',{caster:-1}],
+  ['trochaTras','Angostar la trocha trasera','Más agarre atrás.','10 mm en total',{trochaTras:-10}],
+  ['conduccion','Frenar más derecho','Frená antes y en línea recta. Si frenás fuerte con el volante girado, la cola se suelta. Revisá también que el freno no bloquee.','',null]]},
+ {id:'sob_med',f:'Medio de curva',t:'Suelta la cola en el vértice',d:'En el medio de la curva la cola se desliza y tenés que corregir.',r:[
+  ['trochaTras','Angostar la trocha trasera','La forma más directa de darle agarre a la cola.','10 mm en total (5 por lado)',{trochaTras:-10}],
+  ['eje','Eje más blando','El eje flexa más y la goma trasera apoya mejor.','Un grado más blando',{eje:-1}],
+  ['bancada','Aflojar la bancada central del eje','El eje flexa más en el medio y la goma trasera apoya mejor. Es más rápido de hacer que cambiar el eje.','Ajustada → floja',{bancada:1}],
+  ['bujesTras','Masas traseras más largas','Más rigidez en la rueda trasera: más agarre.','Un largo más',{bujesTras:15}],
+  ['alturaTras','Más altura atrás','Más transferencia de peso hacia la rueda trasera externa.','1 posición',{alturaTras:1}],
+  ['trochaDel','Angostar la trocha delantera','Le quita algo de mordida a la trompa y equilibra el kart.','Medio separador por lado',{trochaDel:-0.5}],
+  ['presionTras','Revisar presión trasera','Si las traseras salen pasadas de temperatura, bajá presión.','−0,5 psi',{presionTras:-0.5}]]},
+ {id:'sob_sal',f:'Salida',t:'Se va de cola al acelerar',d:'Cuando acelerás la cola patina y perdés tracción.',r:[
+  ['trochaTras','Angostar la trocha trasera','Más agarre trasero cuando el motor empuja.','10 mm en total',{trochaTras:-10}],
+  ['bujesTras','Masas traseras más largas','Más rigidez y agarre en la rueda trasera.','Un largo más',{bujesTras:15}],
+  ['eje','Eje más blando','Mejor tracción en curvas lentas.','Un grado más blando',{eje:-1}],
+  ['bancada','Aflojar o sacar la bancada central','Más flexión del eje, más tracción a la salida.','Un paso: floja o sin bancada',{bancada:1}],
+  ['asiento','Asiento un poco más atrás','Más peso sobre el eje trasero.','5 a 10 mm',{asiento:10}],
+  ['conduccion','Acelerar más progresivo','Abrí el acelerador a medida que enderezás el volante.','',null]]},
+ {id:'salta',f:'General',t:'Salta o brinca en curva',d:'La trompa rebota o el kart da saltitos en el apoyo. Suele ser exceso de agarre adelante o una cola que no se libera.',r:[
+  ['caster','Menos caster','Reduce la carga brusca sobre la rueda delantera externa.','1 posición de pastilla',{caster:-1}],
+  ['trochaDel','Angostar la trocha delantera','Menos palanca adelante, el kart apoya más suave.','Medio separador por lado',{trochaDel:-0.5}],
+  ['toe','Verificar alineación','Una convergencia mal puesta o un golpe en la dirección hacen saltar al kart. Medí y llevá a 0.','Medir y llevar a 0 mm',{toe:'z'}],
+  ['camber','Llevar el camber a neutro','Demasiado camber negativo concentra la carga en el borde de la goma.','1 posición hacia 0',{camber:'z'}],
+  ['trochaTras','Ensanchar la trocha trasera','Si la cola no se libera, el kart rebota adelante.','10 mm en total',{trochaTras:10}],
+  ['presionDel','Bajar presión delantera','Más goma apoyada y amortiguación del neumático.','−0,5 psi',{presionDel:-0.5}]]},
+ {id:'traba',f:'General',t:'Se traba, no corre',d:'Mucho agarre, el motor se ahoga en curva y pierde en recta. Típico con la pista engomada y caliente.',r:[
+  ['trochaTras','Ensanchar la trocha trasera','Libera la cola. Respetá el máximo de tu reglamento (suele ser 1400 mm).','10 mm en total',{trochaTras:10}],
+  ['eje','Eje más duro','El eje flexa menos y la rueda interna se levanta antes.','Un grado más duro',{eje:1}],
+  ['bancada','Ajustar o volver a poner la bancada central','Rigidiza el eje y libera la cola.','Un paso hacia ajustada',{bancada:-1}],
+  ['bujesTras','Masas traseras más cortas','Menos agarre atrás.','Un largo menos',{bujesTras:-15}],
+  ['alturaTras','Menos altura atrás','Menos transferencia de peso, kart más libre.','1 posición',{alturaTras:-1}],
+  ['tirantes','Sacar tirantes del asiento','El chasis flexa más y se libera.','Un tirante menos',{tirantes:-1}],
+  ['presionTras','Subir presión trasera','Menos huella, menos agarre.','+0,5 psi',{presionTras:0.5}]]},
+ {id:'sin_agarre',f:'General',t:'Le falta agarre en general',d:'Pista fría, verde o con poca goma: el kart desliza de las dos puntas.',r:[
+  ['presionTras','Subir presiones en frío','Las gomas llegan antes a temperatura de trabajo. Hacelo en las cuatro.','+1 psi',{presionDel:1,presionTras:1}],
+  ['trochaTras','Angostar la trocha trasera','Más agarre atrás.','10 mm en total',{trochaTras:-10}],
+  ['eje','Eje más blando','Más agarre mecánico.','Un grado más blando',{eje:-1}],
+  ['bancada','Aflojar o sacar la bancada central','El eje flexa más y genera agarre atrás.','Un paso: floja o sin bancada',{bancada:1}],
+  ['trochaDel','Ensanchar la trocha delantera','Más agarre adelante.','Medio separador por lado',{trochaDel:0.5}],
+  ['tirantes','Agregar tirantes al asiento','Rigidiza el chasis y genera más carga.','Un tirante más',{tirantes:1}],
+  ['alturaTras','Más altura atrás','Más transferencia de peso.','1 posición',{alturaTras:1}]]},
+ {id:'temp',f:'General',t:'Las gomas no levantan temperatura',d:'Las primeras vueltas son lentas y las gomas salen frías al tacto.',r:[
+  ['presionTras','Subir presiones en frío','Más presión hace que la goma levante temperatura más rápido.','+1 psi',{presionDel:1,presionTras:1}],
+  ['caster','Más caster','Trabaja más las gomas en cada curva.','1 posición de pastilla',{caster:1}],
+  ['camber','Más camber negativo','Carga más la goma delantera.','1 posición',{camber:-1}],
+  ['trochaTras','Angostar la trocha trasera','Más carga en las gomas traseras.','10 mm en total',{trochaTras:-10}]]},
+ {id:'volante',f:'General',t:'Volante muy pesado',d:'Cansa los brazos y cuesta corregir.',r:[
+  ['caster','Menos caster','Es el ajuste que más afecta el peso del volante.','1 posición de pastilla',{caster:-1}],
+  ['ackermann','Menos Ackermann','Menos resistencia al girar mucho.','1 posición',{ackermann:-1}],
+  ['toe','Revisar convergencia','Una divergencia excesiva hace que las ruedas peleen entre sí.','Medir y llevar a 0 mm',{toe:'z'}],
+  ['otro','Revisar rodamientos de la columna y manguetas','Un rodamiento duro o una mangueta torcida hacen pesado el volante sin importar el setup.','',null]]}
+];
+const PHASES=['Entrada','Medio de curva','Salida','General'];
+const COND={seco:'Seco',humedo:'Húmedo',mojado:'Mojado'};
+const COND_NOTE={
+ mojado:'<b>Base para mojado.</b> Antes de ajustar por síntoma, armá un setup de lluvia: chasis lo más alto posible adelante y atrás, trocha delantera al máximo, trocha trasera angosta, eje blando, caster al máximo y presiones más altas (alrededor de 14 a 20 psi, según la goma de lluvia). Después corregí con la lista.',
+ humedo:'<b>Pista secándose.</b> Las condiciones cambian vuelta a vuelta. Priorizá cambios rápidos de hacer (presiones, trochas) y esperá a que la pista se estabilice antes de sacar conclusiones.'
+};
+
+/* =============== Utilidades =============== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nf=(v,d=0)=>Number(v).toLocaleString('es-AR',{minimumFractionDigits:d,maximumFractionDigits:d});
+function parseLap(s){s=String(s||'').trim().replace(',','.');if(!s)return null;let v;if(s.includes(':')){const[m,r]=s.split(':');v=(+m)*60+(+r)}else v=+s;return isFinite(v)&&v>0?v:null}
+function fmtLap(v){if(v==null||!isFinite(v))return '—';if(v>=60){const m=Math.floor(v/60);return m+':'+(v-m*60).toFixed(3).padStart(6,'0')}return v.toFixed(3)}
+function today(){const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function fmtDate(s){if(!s)return '';const[y,m,d]=s.split('-');return d+'/'+m+'/'+(y||'').slice(2)}
+function clampV(k,v){const p=NUM[k];v=Math.round(v/p.step)*p.step;return +Math.min(p.max,Math.max(p.min,v)).toFixed(2)}
+function fmtVal(k,v){const p=NUM[k];if(v==null||!isFinite(v))return '—';
+ if(p.labels)return p.labels[Math.round(v-p.min)]??String(v);
+ if(k==='toe')return v===0?'0 mm (neutro)':v>0?nf(v,1)+' mm diverge':nf(-v,1)+' mm converge';
+ if(k==='caster'||k==='camber')return (v>0?'+':'')+v+' pos';
+ if(k==='asiento')return v===0?'estándar':v>0?v+' mm atrás':(-v)+' mm adelante';
+ if(k==='trochaDel')return nf(v,v%1?1:0)+(v===1?' separador':' separadores')+' por lado';
+ if(p.u==='psi')return nf(v,v%1?1:0)+' psi';
+ return nf(v)+' '+p.u}
+function normSetup(src){src=src||{};const o={};
+ for(const k in NUM){let v=parseFloat(String(src[k]??'').replace(',','.'));
+  if(isFinite(v)&&(k==='presionDel'||k==='presionTras')&&v<3)v=v*14.5038;
+  if(isFinite(v)&&k==='trochaDel'&&v>20)v=(v-1000)/20;
+  o[k]=isFinite(v)?clampV(k,v):NUM[k].def}
+ for(const [k] of TEXT_FIELDS)o[k]=String(src[k]??'');o.notas=String(src.notas??'');if(src.updatedAt)o.updatedAt=src.updatedAt;return o}
+function applyDelta(base,delta){const o={...base};if(!delta)return o;for(const k in delta){if(!NUM[k])continue;o[k]=delta[k]==='z'?0:clampV(k,base[k]+delta[k])}return o}
+function diff(a,b){return Object.keys(NUM).filter(k=>Math.abs(a[k]-b[k])>1e-9).map(k=>({k,from:a[k],to:b[k]}))}
+
+/* =============== Dibujo del kart (unidades: mm) =============== */
+const KF=330,KR=1375,KP=330,SEP_MM=10;
+const fTrack=v=>1000+v*2*SEP_MM;
+function rot(px,py,cx,cy,a){const r=a*Math.PI/180,c=Math.cos(r),s=Math.sin(r);return [cx+(px-cx)*c-(py-cy)*s, cy+(px-cx)*s+(py-cy)*c]}
+function tireTop(x,y,w,l,ghost){
+ if(ghost)return `<rect class="k-ghost" x="${x-w/2}" y="${y-l/2}" width="${w}" height="${l}" rx="26"/>`;
+ let t=`<rect class="k-tire" x="${x-w/2}" y="${y-l/2}" width="${w}" height="${l}" rx="26"/>`;
+ for(let i=-2;i<=2;i++)t+=`<line class="k-tread" x1="${x-w/2+16}" x2="${x+w/2-16}" y1="${y+i*48}" y2="${y+i*48}"/>`;
+ return t}
+function frontAngles(s,steer){const inner=steer*(1+0.14*(s.ackermann-1)),outer=steer*(1-0.07*(s.ackermann-1));
+ const toeA=Math.asin(Math.max(-1,Math.min(1,(s.toe/2)/280)))*180/Math.PI*6;return {L:-inner-toeA,R:-outer+toeA}}
+const BAR_CLS=['','k-bar1','k-bar2','k-bar3'],BAR_H=[0,22,28,34];
+function bearingC(b,R,cls){if(b===2)return '';return `<g class="${cls}">${b===0?`<rect class="k-metal" x="-22" y="${R-58}" width="44" height="116" rx="8"/>`:`<rect class="k-loose" x="-26" y="${R-62}" width="52" height="124" rx="8"/><rect class="k-metal" x="-14" y="${R-40}" width="28" height="80" rx="6"/>`}</g>`}
+function dim(x1,x2,y,txt,chg){return `<g><line class="k-dim" x1="${x1}" x2="${x2}" y1="${y}" y2="${y}"/><line class="k-dim" x1="${x1}" x2="${x1}" y1="${y-22}" y2="${y+22}"/><line class="k-dim" x1="${x2}" x2="${x2}" y1="${y-22}" y2="${y+22}"/><text class="k-dimt${chg?' chg':''}" x="${(x1+x2)/2}" y="${y-20}" text-anchor="middle">${txt}</text></g>`}
+function seatTop(y,cls){return `<path class="${cls}" d="M-185 ${y-200} Q-200 ${y+170} 0 ${y+195} Q200 ${y+170} 185 ${y-200} Q0 ${y-255} -185 ${y-200} Z"/>`}
+
+function drawTop(s,o={}){
+ const hl=o.hl||new Set(),g=o.ghost,steer=o.steer||0,Z=n=>hl.has(n)?' hl':'';
+ const F=KF,R=KR,fcx=fTrack(s.trochaDel)/2-65,rcx=s.trochaTras/2-105,A=frontAngles(s,steer);
+ let v=`<svg viewBox="-760 -165 1520 1955" class="kdraw" role="img" aria-label="Kart visto desde arriba">`;
+ v+=dim(-fTrack(s.trochaDel)/2,fTrack(s.trochaDel)/2,-95,nf(s.trochaDel,s.trochaDel%1?1:0)+' sep. por lado',g&&g.trochaDel!==s.trochaDel);
+ v+=`<path class="k-tray" d="M-150 190 L150 190 L270 ${F+70} L240 ${R-170} L-240 ${R-170} L-270 ${F+70} Z"/>`;
+ const rail=sg=>`M${sg*150} 150 L${sg*KP} ${F} L${sg*300} ${F+430} L${sg*330} ${R-110} L${sg*330} ${R+120}`;
+ const inner=sg=>`M${sg*KP} ${F} L${sg*195} ${F+470} L${sg*195} ${R-70} L${sg*330} ${R+120}`;
+ v+=`<path class="k-tube" d="${rail(-1)}"/><path class="k-tube" d="${rail(1)}"/><path class="k-tube thin" d="${inner(-1)}"/><path class="k-tube thin" d="${inner(1)}"/><path class="k-tube thin" d="M-300 ${F+430} L300 ${F+430}"/>`;
+ v+=`<g class="${Z('ffront')}"><path class="k-tube" d="M-150 150 L150 150 M${-KP} ${F} L${KP} ${F}"/></g>`;
+ v+=`<g class="${Z('frear')}"><path class="k-tube" d="M-330 ${R+120} L330 ${R+120}"/></g>`;
+ if(s.barraDel>0)v+=`<g class="${Z('bar')}"><rect class="${BAR_CLS[s.barraDel]}" x="-285" y="${F+48}" width="570" height="${BAR_H[s.barraDel]}" rx="8"/></g>`;
+ if(g&&g.barraDel!==s.barraDel&&g.barraDel>0)v+=`<rect class="k-ghost" x="-285" y="${F+48}" width="570" height="${BAR_H[g.barraDel]}"/>`;
+ /* eje, rodamientos, corona, disco */
+ v+=`<g class="${Z('axle')}"><line class="k-axle" x1="${-(rcx+70)}" y1="${R}" x2="${rcx+70}" y2="${R}"/><rect class="k-metal" x="-218" y="${R-110}" width="14" height="220" rx="4"/></g>`;
+ v+=[-330,330].map(x=>`<rect class="k-metal" x="${x-22}" y="${R-58}" width="44" height="116" rx="8"/>`).join('');
+ v+=bearingC(s.bancada,R,Z('bearing'));
+ if(g&&g.bancada!==s.bancada&&g.bancada<2&&s.bancada===2)v+=`<rect class="k-ghost" x="-22" y="${R-58}" width="44" height="116"/>`;
+ v+=`<rect class="k-metal" x="140" y="${R-105}" width="12" height="210"/><rect class="k-hub" x="122" y="${R-140}" width="48" height="64" rx="8"/>`;
+ const hub=(sg,rc,b,cls)=>{const inn=rc-105;return `<rect class="${cls}" x="${sg>0?inn-b:-inn}" y="${R-50}" width="${b}" height="100" rx="12"/>`};
+ v+=`<g class="${Z('hub')}">${hub(-1,rcx,s.bujesTras,'k-hub')}${hub(1,rcx,s.bujesTras,'k-hub')}</g>`;
+ v+=`<g class="${Z('rw')}">${tireTop(-rcx,R,210,280)}${tireTop(rcx,R,210,280)}</g>`;
+ if(g&&g.trochaTras!==s.trochaTras){const gr=g.trochaTras/2-105;v+=tireTop(-gr,R,210,280,1)+tireTop(gr,R,210,280,1)}
+ if(g&&(g.bujesTras!==s.bujesTras||g.trochaTras!==s.trochaTras)){const gr=g.trochaTras/2-105;v+=hub(-1,gr,g.bujesTras,'k-ghost')+hub(1,gr,g.bujesTras,'k-ghost')}
+ /* tren delantero: mangueta + brazo + rueda rotan sobre el pivote */
+ const fwG=(sg,cx,a)=>`<g transform="rotate(${a.toFixed(2)} ${sg*KP} ${F})"><g class="${Z('king')}"><line class="k-stub" x1="${sg*KP}" y1="${F}" x2="${sg*cx}" y2="${F}"/></g><g class="${Z('steer')}"><line class="k-arm" x1="${sg*KP}" y1="${F}" x2="${sg*(KP-55)}" y2="${F+115}"/></g><g class="${Z('fw')}">${tireTop(sg*cx,F,130,280)}</g></g>`;
+ v+=fwG(-1,fcx,A.L)+fwG(1,fcx,A.R);
+ if(g&&(g.trochaDel!==s.trochaDel||g.toe!==s.toe||g.ackermann!==s.ackermann)){const GA=frontAngles(g,steer),gc=fTrack(g.trochaDel)/2-65;
+  v+=`<g transform="rotate(${GA.L.toFixed(2)} ${-KP} ${F})">${tireTop(-gc,F,130,280,1)}</g><g transform="rotate(${GA.R.toFixed(2)} ${KP} ${F})">${tireTop(gc,F,130,280,1)}</g>`}
+ v+=`<g class="${Z('king')}"><circle class="k-kp" cx="${-KP}" cy="${F}" r="32"/><circle class="k-kp" cx="${KP}" cy="${F}" r="32"/></g>`;
+ const [lx,ly]=rot(-(KP-55),F+115,-KP,F,A.L),[rx,ry]=rot(KP-55,F+115,KP,F,A.R);
+ const [p1x,p1y]=rot(-42,F+150,0,F+150,-steer*1.6),[p2x,p2y]=rot(42,F+150,0,F+150,-steer*1.6);
+ v+=`<g class="${Z('steer')}"><line class="k-rod" x1="${p1x}" y1="${p1y}" x2="${lx}" y2="${ly}"/><line class="k-rod" x1="${p2x}" y1="${p2y}" x2="${rx}" y2="${ry}"/><line class="k-arm" x1="${p1x}" y1="${p1y}" x2="${p2x}" y2="${p2y}"/><line class="k-col" x1="0" y1="${F+150}" x2="0" y2="690"/></g>`;
+ /* carrocería */
+ v+=`<path class="k-body" d="M-125 195 L125 195 L178 595 L-178 595 Z"/>`;
+ const pod=sg=>`M${sg*372} ${F+200} L${sg*630} ${F+235} Q${sg*690} ${F+290} ${sg*682} ${F+420} L${sg*655} ${R-205} Q${sg*640} ${R-182} ${sg*600} ${R-182} L${sg*395} ${R-190} Z`;
+ v+=`<path class="k-body" d="${pod(-1)}"/><path class="k-body" d="${pod(1)}"/>`;
+ v+=`<path class="k-body" d="M-470 125 C-470 35 -400 0 -300 -6 L300 -6 C400 0 470 35 470 125 L430 168 L-430 168 Z"/>`;
+ v+=`<rect class="k-body" x="-725" y="${R+178}" width="1450" height="108" rx="46"/>`;
+ /* motor a la izquierda, cadena a la corona */
+ v+=`<line class="k-chain" x1="-211" y1="1150" x2="-211" y2="${R-105}"/><rect class="k-engine" x="-455" y="1000" width="200" height="260" rx="34"/><circle class="k-metal" cx="-355" cy="1130" r="58"/><rect class="k-metal" x="-250" y="1095" width="42" height="120" rx="8"/>`;
+ /* asiento y tirantes */
+ const sy=1060+s.asiento;
+ let tir='';for(let i=0;i<s.tirantes;i++)for(const sg of[-1,1])tir+=`<line class="k-rod" x1="${sg*175}" y1="${sy+40+i*70}" x2="${sg*322}" y2="${R-90-i*60}"/>`;
+ v+=`<g class="${Z('seat')}">${tir}${seatTop(sy,'k-seat')}<path class="k-seatin" d="M-120 ${sy-165} Q-130 ${sy+110} 0 ${sy+125} Q130 ${sy+110} 120 ${sy-165} Q0 ${sy-205} -120 ${sy-165} Z"/></g>`;
+ if(g&&g.asiento!==s.asiento)v+=seatTop(1060+g.asiento,'k-ghost');
+ v+=`<ellipse class="k-wheel" cx="0" cy="690" rx="160" ry="34"/><rect class="k-metal" x="-32" y="672" width="64" height="36" rx="8"/>`;
+ v+=dim(-s.trochaTras/2,s.trochaTras/2,R+372,nf(s.trochaTras)+' mm',g&&g.trochaTras!==s.trochaTras);
+ return v+'</svg>'}
+
+function drawSide(s,o={}){
+ const hl=o.hl||new Set(),g=o.ghost,Z=n=>hl.has(n)?' hl':'';
+ const F=KF,R=KR,hh=a=>45+(a-2)*26;
+ const frame=(a,b,cls1,cls2)=>{const hf=hh(a),hr=hh(b),mx=(F+R)/2,mh=(hf+hr)/2;return `<g class="${cls1}"><path class="k-tube thin" d="M120 ${-hf-12} L${F} ${-hf} L${mx} ${-mh}"/></g><g class="${cls2}"><path class="k-tube thin" d="M${mx} ${-mh} L${R+120} ${-hr}"/></g>`};
+ const frameG=(a,b)=>{const hf=hh(a),hr=hh(b),mx=(F+R)/2;return `<path class="k-ghostline" d="M120 ${-hf-12} L${F} ${-hf} L${mx} ${-(hf+hr)/2} L${R+120} ${-hr}"/>`};
+ const kp=c=>{const a=(12+1.6*c)*Math.PI/180,dx=Math.sin(a)*125,dy=Math.cos(a)*125;return [F-dx,-140+dy,F+dx,-140-dy]};
+ const seatS=(x,hb,cls)=>`<path class="${cls}" d="M${x-215} ${-hb-135} L${x-190} ${-hb-28} L${x+160} ${-hb-28} Q${x+205} ${-hb-34} ${x+218} ${-hb-125} L${x+255} ${-hb-540} L${x+195} ${-hb-540} L${x+150} ${-hb-160} L${x-150} ${-hb-125} Z"/>`;
+ const hAt=(a,b,x)=>{const hf=hh(a),hr=hh(b);return hf+(hr-hf)*Math.max(0,Math.min(1,(x-F)/(R-F)))};
+ let v=`<svg viewBox="-80 -760 1880 840" class="kdraw" role="img" aria-label="Kart visto de costado">`;
+ v+=`<line class="k-ground" x1="-60" x2="1800" y1="4" y2="4"/>`;
+ v+=`<path class="k-body" d="M-30 -70 Q-45 -215 70 -240 L185 -232 L185 -62 Z"/>`;
+ v+=`<path class="k-body" d="M${R+165} -55 L${R+300} -55 L${R+300} -250 L${R+190} -250 Z"/>`;
+ v+=frame(s.alturaDel,s.alturaTras,Z('ffront'),Z('frear'));
+ if(g&&(g.alturaDel!==s.alturaDel||g.alturaTras!==s.alturaTras))v+=frameG(g.alturaDel,g.alturaTras);
+ v+=`<g class="${Z('rw')}"><circle class="k-tire" cx="${R}" cy="-140" r="140"/><circle class="k-rim" cx="${R}" cy="-140" r="78"/></g>`;
+ v+=`<path class="k-body" d="M${F+190} -60 L${R-190} -60 L${R-200} -215 L${F+215} -200 Z"/>`;
+ const sx=1060+s.asiento,hb=hAt(s.alturaDel,s.alturaTras,sx);
+ v+=`<rect class="k-engine" x="${960}" y="${-hAt(s.alturaDel,s.alturaTras,1060)-420}" width="250" height="300" rx="30"/>`;
+ v+=`<g class="${Z('seat')}">${seatS(sx,hb,'k-seat')}</g>`;
+ if(g&&(g.asiento!==s.asiento))v+=seatS(1060+g.asiento,hAt(g.alturaDel,g.alturaTras,1060+g.asiento),'k-ghost');
+ v+=`<line class="k-col" x1="${F+160}" y1="${-hh(s.alturaDel)-70}" x2="700" y2="-430"/><line class="k-wheel" x1="650" y1="-575" x2="745" y2="-290"/>`;
+ v+=`<path class="k-body" d="M150 -150 L560 -330 L590 -300 L190 -110 Z"/>`;
+ v+=`<g class="${Z('fw')}"><circle class="k-tire" cx="${F}" cy="-140" r="140"/><circle class="k-rim" cx="${F}" cy="-140" r="70"/></g>`;
+ const k=kp(s.caster);v+=`<g class="${Z('king')}"><line class="k-arm" x1="${k[0]}" y1="${k[1]}" x2="${k[2]}" y2="${k[3]}"/></g>`;
+ if(g&&g.caster!==s.caster){const q=kp(g.caster);v+=`<line class="k-ghostline" x1="${q[0]}" y1="${q[1]}" x2="${q[2]}" y2="${q[3]}"/>`}
+ v+=`<text class="k-dimt${g&&g.caster!==s.caster?' chg':''}" x="${F}" y="62" text-anchor="middle">caster ${fmtVal('caster',s.caster)}</text>`;
+ v+=`<text class="k-dimt${g&&(g.alturaDel!==s.alturaDel||g.alturaTras!==s.alturaTras)?' chg':''}" x="${R-40}" y="62" text-anchor="middle">altura ${fmtVal('alturaDel',s.alturaDel).toLowerCase()} / ${fmtVal('alturaTras',s.alturaTras).toLowerCase()}</text>`;
+ return v+'</svg>'}
+
+function drawFront(s,o={}){
+ const hl=o.hl||new Set(),g=o.ghost,Z=n=>hl.has(n)?' hl':'';
+ const hh=a=>45+(a-2)*26,hf=hh(s.alturaDel),fc=fTrack(s.trochaDel)/2-65,k=3;
+ const wheel=(x,a,ghost)=>ghost?`<rect class="k-ghost" x="${x-65}" y="-280" width="130" height="280" rx="22" transform="rotate(${a} ${x} 0)"/>`:
+  `<g transform="rotate(${a} ${x} 0)"><rect class="k-tire" x="${x-65}" y="-280" width="130" height="280" rx="22"/><rect class="k-rim" x="${x-46}" y="-205" width="92" height="130" rx="10"/></g>`;
+ let v=`<svg viewBox="-640 -500 1280 590" class="kdraw" role="img" aria-label="Kart visto de frente">`;
+ v+=`<line class="k-ground" x1="-620" x2="620" y1="4" y2="4"/>`;
+ v+=`<g class="${Z('seat')}"><path class="k-seatin" d="M-170 ${-hf-40} L170 ${-hf-40} L185 ${-hf-400} Q0 ${-hf-440} -185 ${-hf-400} Z"/></g>`;
+ v+=`<circle fill="none" stroke="var(--metal)" stroke-width="20" cx="0" cy="${-hf-310}" r="120"/><line class="k-col" x1="0" y1="${-hf-190}" x2="0" y2="${-hf-60}"/>`;
+ v+=`<g class="${Z('ffront')}"><line class="k-tube" x1="${-KP}" y1="${-hf}" x2="${KP}" y2="${-hf}"/></g>`;
+ if(s.barraDel>0)v+=`<g class="${Z('bar')}"><rect class="${BAR_CLS[s.barraDel]}" x="-290" y="${-hf-60}" width="580" height="${BAR_H[s.barraDel]}" rx="8"/></g>`;
+ const aL=-s.camber*k,aR=s.camber*k;
+ const [lcx,lcy]=rot(-fc,-140,-fc,0,aL),[rcx,rcy]=rot(fc,-140,fc,0,aR);
+ v+=`<g class="${Z('king')}"><line class="k-stub" x1="${-KP}" y1="${-hf-50}" x2="${lcx}" y2="${lcy}"/><line class="k-stub" x1="${KP}" y1="${-hf-50}" x2="${rcx}" y2="${rcy}"/><rect class="k-kp" x="${-KP-18}" y="${-hf-120}" width="36" height="120" rx="8"/><rect class="k-kp" x="${KP-18}" y="${-hf-120}" width="36" height="120" rx="8"/></g>`;
+ v+=`<g class="${Z('fw')}">${wheel(-fc,aL)}${wheel(fc,aR)}</g>`;
+ if(g&&(g.trochaDel!==s.trochaDel||g.camber!==s.camber)){const gf=fTrack(g.trochaDel)/2-65;v+=wheel(-gf,-g.camber*k,1)+wheel(gf,g.camber*k,1)}
+ v+=`<text class="k-dimt${g&&g.camber!==s.camber?' chg':''}" x="0" y="70" text-anchor="middle">camber ${fmtVal('camber',s.camber)}</text>`;
+ return v+'</svg>'}
+
+/* =============== Estado y almacenamiento =============== */
+let S={setup:normSetup({}),salidas:[],cond:'seco',sym:'sub_ent',recSel:0};
+let draft=null, db=null, mode='local', setupLoaded=false, steer=0;
+const LS='planillaChasis.v1';
+function lsGet(){try{return JSON.parse(localStorage.getItem(LS)||'null')}catch(e){return null}}
+/* Pendientes de subir a la nube: salidas nuevas o editadas, salidas borradas y el setup */
+let P={sal:[],del:[],setup:false},legacy=false;
+function lsSet(){try{localStorage.setItem(LS,JSON.stringify({setup:S.setup,salidas:S.salidas,cond:S.cond,sym:S.sym,pend:P}))}catch(e){}}
+const cached=lsGet();if(cached){S.salidas=cached.salidas||[];S.cond=cached.cond||'seco';S.sym=cached.sym||'sub_ent';S.setup=normSetup(cached.setup);if(cached.pend)P={sal:cached.pend.sal||[],del:cached.pend.del||[],setup:!!cached.pend.setup};else legacy=S.salidas.length>0}
+function markSal(id){if(!P.sal.includes(id))P.sal.push(id);P.del=P.del.filter(x=>x!==id)}
+draft={...S.setup};
+function sorted(){return [...S.salidas].sort((a,b)=>(b.fecha||'').localeCompare(a.fecha||'')||(b.createdAt||0)-(a.createdAt||0))}
+const withTO=(pr,ms=20000)=>Promise.race([pr,new Promise((_,rej)=>setTimeout(()=>rej({code:'timeout'}),ms))]);
+async function writeSalida(s){markSal(s.id);lsSet();if(mode!=='db')return;const{id,...body}=s;await withTO(db.collection('salidas').doc(id).set(body));P.sal=P.sal.filter(x=>x!==id);lsSet();updStore()}
+async function deleteSalida(id){P.sal=P.sal.filter(x=>x!==id);if(!P.del.includes(id))P.del.push(id);lsSet();if(mode!=='db')return;await withTO(db.collection('salidas').doc(id).delete());P.del=P.del.filter(x=>x!==id);lsSet();updStore()}
+async function writeSetup(){P.setup=true;lsSet();if(mode!=='db')return;await withTO(db.doc('kart/setup').set(S.setup));P.setup=false;lsSet();updStore()}
+function pendCount(){return P.sal.length+P.del.length+(P.setup?1:0)}
+function updStore(){const st=$('#store');if(mode!=='db')return;const n=pendCount();st.classList.toggle('cloud',!n);st.querySelector('span').textContent=n?(n===1?'1 cambio sin subir a la nube':n+' cambios sin subir a la nube'):'Guardado en tu cuenta de Claude'}
+let syncing=false;
+async function syncPending(){if(mode!=='db'||syncing||!pendCount())return;syncing=true;
+ try{
+  if(P.setup){try{await writeSetup()}catch(e){}}
+  for(const id of [...P.del]){try{await deleteSalida(id)}catch(e){}}
+  for(const id of [...P.sal]){const s=S.salidas.find(x=>x.id===id);if(!s){P.sal=P.sal.filter(x=>x!==id);continue}try{await writeSalida(s)}catch(e){}}
+ }finally{syncing=false;lsSet();updStore()}}
+
+/* =============== Aprendizaje =============== */
+function history(symId,param){const h={mejoro:0,igual:0,empeoro:0};
+ for(const s of S.salidas){if(s.cambio&&s.cambio.param===param&&(s.sintomas||[]).includes(symId)&&h[s.resultado]!=null)h[s.resultado]++}return h}
+function rankedRecs(sym){return sym.r.map((r,i)=>{const h=history(sym.id,r[0]);return {r,h,score:(sym.r.length-i)+3*(h.mejoro-h.empeoro),i}}).sort((a,b)=>b.score-a.score||a.i-b.i)}
+
+/* =============== Diagnóstico =============== */
+function renderDiag(){
+ $('#condSeg').innerHTML=Object.entries(COND).map(([k,v])=>`<button class="chip" data-cond="${k}" aria-pressed="${S.cond===k}">${v}</button>`).join('');
+ $('#symList').innerHTML=PHASES.map(ph=>`<div class="symgroup"><div class="lbl">${ph}</div>${SYMPTOMS.filter(s=>s.f===ph).map(s=>`<button class="sym" data-sym="${s.id}" aria-pressed="${S.sym===s.id}">${esc(s.t)}</button>`).join('')}</div>`).join('');
+ const sym=SYMPTOMS.find(s=>s.id===S.sym)||SYMPTOMS[0];
+ $('#symPhase').textContent=sym.f;$('#symTitle').textContent=sym.t;$('#symDesc').textContent=sym.d;
+ $('#condNote').innerHTML=COND_NOTE[S.cond]?`<div class="note" style="margin-top:14px">${COND_NOTE[S.cond]}</div>`:'';
+ const list=rankedRecs(sym);if(S.recSel>=list.length)S.recSel=0;
+ $('#recs').innerHTML=list.map(({r,h},i)=>{
+  const tot=h.mejoro+h.igual+h.empeoro;let badge='';
+  if(tot){const cls=h.mejoro>h.empeoro?'g':h.empeoro>h.mejoro?'b':'s';badge=`<span class="hist ${cls}">En tu kart: ${h.mejoro} mejoró · ${h.igual} igual · ${h.empeoro} empeoró</span>`}
+  return `<li class="rec" data-rec="${i}" aria-current="${i===S.recSel}"><div><div class="p">${esc(PARAMS[r[0]].n)}</div><h3>${esc(r[1])}</h3><p>${esc(r[2])}</p>${r[3]?`<span class="amt">${esc(r[3])}</span>`:''}<div class="row">${badge}${r[4]?`<button class="btn sm" data-view="${i}">Ver en el kart</button><button class="btn sm" data-sim="${i}">Ajustar en el simulador</button>`:''}<button class="btn sm" data-try="${r[0]}">Probar en la próxima salida</button></div></div></li>`}).join('');
+ renderPreview(list[S.recSel]);
+}
+function renderPreview(item){
+ const r=item.r,base=S.setup,after=applyDelta(base,r[4]),ch=diff(base,after);
+ const hl=new Set(PARAMS[r[0]].z);
+ const opt={hl,ghost:ch.length?base:null};
+ $('#dgTop').innerHTML=drawTop(after,opt);$('#dgSide').innerHTML=drawSide(after,opt);$('#dgFront').innerHTML=drawFront(after,opt);
+ $('#prevCap').innerHTML=`<div class="lbl">Vista previa: ${esc(r[1])}</div>`+(ch.length?ch.map(c=>`<div class="c">${esc(NUM[c.k].n)}: ${esc(fmtVal(c.k,c.from))} → <b>${esc(fmtVal(c.k,c.to))}</b></div>`).join('')+'<div class="figcap">Punteado: tu setup guardado. En color: dónde se toca.</div>'
+  :`<div class="figcap">${r[4]?'Tu setup ya está en el límite de este ajuste.':'Este punto no cambia el setup. En color, la zona del kart involucrada.'}</div>`);
+}
+document.addEventListener('click',e=>{
+ const c=e.target.closest('[data-cond]');if(c){S.cond=c.dataset.cond;lsSet();renderDiag();return}
+ const s=e.target.closest('[data-sym]');if(s){S.sym=s.dataset.sym;S.recSel=0;lsSet();renderDiag();if(innerWidth<860)$('#symTitle').scrollIntoView({behavior:'smooth',block:'start'});return}
+ const t=e.target.closest('[data-try]');if(t){prefillSalida(S.sym,t.dataset.try);return}
+ const sm=e.target.closest('[data-sim]');if(sm){const it=rankedRecs(SYMPTOMS.find(x=>x.id===S.sym))[+sm.dataset.sim];draft=applyDelta(S.setup,it.r[4]);go('setup');renderSim(true);scrollTo({top:0});return}
+ const rv=e.target.closest('[data-view]')||(!e.target.closest('button')&&e.target.closest('[data-rec]'));
+ if(rv){S.recSel=+(rv.dataset.view??rv.dataset.rec);renderDiag();if(innerWidth<860)$('.prev').scrollIntoView({behavior:'smooth',block:'start'});return}
+});
+
+/* =============== Simulador =============== */
+function renderSliders(){
+ $('#sliders').innerHTML=NUM_GROUPS.map(([g,ks])=>`<div class="sgroup"><h3>${g}</h3>${ks.map(k=>{const p=NUM[k];return `<div class="sl" id="sl_${k}"><div class="top"><label for="r_${k}">${p.n}</label><output id="o_${k}"></output></div><input type="range" id="r_${k}" data-k="${k}" min="${p.min}" max="${p.max}" step="${p.step}"><span class="h">${p.h}</span><span class="was" id="w_${k}"></span></div>`}).join('')}</div>`).join('');
+}
+function renderSim(syncInputs){
+ const ch=diff(S.setup,draft);
+ for(const k in NUM){const inp=$('#r_'+k);if(syncInputs||!inp.matches(':active'))inp.value=draft[k];$('#o_'+k).textContent=fmtVal(k,draft[k]);
+  const c=Math.abs(draft[k]-S.setup[k])>1e-9;$('#sl_'+k).classList.toggle('chg',c);$('#w_'+k).textContent=c?'Guardado: '+fmtVal(k,S.setup[k]):''}
+ const hl=new Set(ch.flatMap(c=>PARAMS[c.k].z));
+ const opt={hl,ghost:ch.length?S.setup:null,steer};
+ $('#smTop').innerHTML=drawTop(draft,opt);$('#smSide').innerHTML=drawSide(draft,opt);$('#smFront').innerHTML=drawFront(draft,opt);
+ $('#chgBox').innerHTML=ch.length?`<div class="lbl">Cambios sin guardar (${ch.length})</div><ul>${ch.map(c=>`<li>${esc(NUM[c.k].n)}: ${esc(fmtVal(c.k,c.from))} → ${esc(fmtVal(c.k,c.to))}</li>`).join('')}</ul>${ch.length>1?'<div class="warn">Son varios cambios a la vez. Para saber qué funcionó, probá de a uno.</div>':''}<div class="actions" style="margin-top:10px"><button class="btn pri sm" data-act="saveNext">Guardar y anotar para la próxima salida</button><button class="btn sm" data-act="save">Solo guardar</button><button class="btn sm" data-act="discard">Descartar</button></div>`
+  :`<div class="lbl">Sin cambios</div><div class="figcap" style="margin-top:4px">Las barras muestran tu setup guardado. Movelas para ver cómo cambia el kart.</div>`;
+}
+let raf=0;
+$('#sliders').addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;draft[k]=clampV(k,parseFloat(e.target.value));cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>renderSim(false))});
+$('#steer').addEventListener('input',e=>{steer=+e.target.value;$('#steerOut').textContent=steer+'°';cancelAnimationFrame(raf);raf=requestAnimationFrame(()=>renderSim(false))});
+$('#chgBox').addEventListener('click',async e=>{const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act;
+ if(a==='discard'){draft={...S.setup};renderSim(true);return}
+ const ch=diff(S.setup,draft);
+ await saveSetup();
+ if(a==='saveNext'&&ch.length){
+  selSint=new Set([S.sym]);selRes='';renderSalForm();
+  $('#s_param').value=ch.length===1?ch[0].k:'otro';
+  $('#s_detalle').value=ch.map(c=>`${NUM[c.k].n} ${fmtVal(c.k,c.from)} → ${fmtVal(c.k,c.to)}`).join('; ');
+  const last=sorted()[0];if(last&&!$('#s_pista').value)$('#s_pista').value=last.pista||'';
+  go('salidas');$('#formPanel').scrollIntoView({behavior:'smooth',block:'start'});
+  msgOk('#salSaved','Setup guardado. El cambio quedó anotado: completá la salida cuando bajes del kart.');
+ }
+});
+function renderTextFields(){
+ $('#textFields').innerHTML=TEXT_FIELDS.map(([k,l,ph])=>`<div class="f"><label for="u_${k}">${l}</label><div class="inp"><input id="u_${k}" data-t="${k}" placeholder="${esc(ph)}" value="${esc(S.setup[k]||'')}"></div></div>`).join('');
+ $('#u_notas').value=S.setup.notas||'';
+}
+function msgOk(sel,t){const m=$(sel);m.style.color='';m.textContent=t}
+function msgErr(sel,t){const m=$(sel);m.style.color='var(--bad)';m.textContent=t}
+async function saveSetup(){
+ const d={...draft};
+ document.querySelectorAll('#textFields [data-t]').forEach(i=>{d[i.dataset.t]=i.value.trim()});d.notas=$('#u_notas').value.trim();d.updatedAt=Date.now();
+ S.setup=normSetup(d);draft={...S.setup};lsSet();renderSim(true);renderDiag();
+ msgOk('#setupSaved','Guardando…');
+ try{await writeSetup();msgOk('#setupSaved','Setup guardado')}catch(err){updStore();msgErr('#setupSaved','Sin conexión: quedó guardado en el teléfono y se sube solo cuando vuelva internet.')}
+}
+$('#saveText').addEventListener('click',saveSetup);
+
+/* =============== Salidas =============== */
+function paramOptions(sel){return '<option value="">Nada (salida de referencia)</option>'+Object.entries(PARAMS).map(([k,p])=>`<option value="${k}"${k===sel?' selected':''}>${esc(p.n)}</option>`).join('')}
+let selSint=new Set(),selRes='',pendingData=null;
+function renderSalForm(){
+ if(!$('#s_fecha').value)$('#s_fecha').value=today();
+ const cur=$('#s_param').value;$('#s_param').innerHTML=paramOptions(cur);
+ $('#s_sint').innerHTML=SYMPTOMS.map(s=>`<button type="button" class="chip" data-sint="${s.id}" aria-pressed="${selSint.has(s.id)}">${esc(s.t)}</button>`).join('');
+ $('#pistasDL').innerHTML=[...new Set(S.salidas.map(s=>s.pista).filter(Boolean))].map(p=>`<option value="${esc(p)}">`).join('');
+ document.querySelectorAll('#s_res .chip').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===selRes));
+ $('#s_att').innerHTML=pendingData?`<div class="attached"><span><b>MyChron:</b> ${esc(pendingData.archivo)} · ${pendingData.vueltas.length} vueltas · mejor ${fmtLap(pendingData.mejor?.t)}</span><button type="button" class="btn sm" id="dropData">Quitar</button></div>`:'';
+}
+$('#s_att').addEventListener('click',e=>{if(e.target.id==='dropData'){pendingData=null;$('#s_csv').value='';renderSalForm()}});
+$('#s_sint').addEventListener('click',e=>{const b=e.target.closest('[data-sint]');if(!b)return;const id=b.dataset.sint;selSint.has(id)?selSint.delete(id):selSint.add(id);b.setAttribute('aria-pressed',selSint.has(id))});
+$('#s_res').addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;selRes=selRes===b.dataset.v?'':b.dataset.v;renderSalForm()});
+$('#s_csv').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const d=parseAim(await f.text(),f.name);useDataInForm(d)}catch(err){msgErr('#salSaved',csvError(err))}});
+function useDataInForm(d){pendingData=d;
+ if(d.mejor&&!$('#s_vuelta').value)$('#s_vuelta').value=d.mejor.t.toFixed(3);
+ if(d.fecha)$('#s_fecha').value=d.fecha;
+ if(d.pista&&!$('#s_pista').value)$('#s_pista').value=d.pista;
+ renderSalForm();msgOk('#salSaved','Datos del MyChron listos para esta salida.')}
+function prefillSalida(symId,param){
+ selSint=new Set([symId]);selRes='';
+ const last=sorted()[0];if(last&&!$('#s_pista').value)$('#s_pista').value=last.pista||'';
+ $('#s_cond').value=S.cond;renderSalForm();$('#s_param').value=param;
+ const rec=SYMPTOMS.find(s=>s.id===symId).r.find(r=>r[0]===param);
+ $('#s_detalle').value=rec?rec[1]:'';
+ go('salidas');$('#formPanel').scrollIntoView({behavior:'smooth',block:'start'});
+ msgOk('#salSaved','Cargado desde Diagnóstico. Completá después de la salida.');
+}
+$('#salForm').addEventListener('submit',async e=>{
+ e.preventDefault();
+ const vt=$('#s_vuelta').value.trim(),p=$('#s_param').value;
+ const rec={fecha:$('#s_fecha').value||today(),pista:$('#s_pista').value.trim(),condicion:$('#s_cond').value,tempPista:$('#s_temp').value.trim(),
+  vuelta:parseLap(vt),vueltaTxt:vt,sintomas:[...selSint],cambio:p?{param:p,detalle:$('#s_detalle').value.trim()}:null,resultado:p?selRes:'',
+  notas:$('#s_notas').value.trim(),setup:{...S.setup},createdAt:Date.now()};
+ if(pendingData)rec.datos=pendingData;
+ if(vt&&rec.vuelta==null){msgErr('#salSaved','No entendí la vuelta. Escribila como 52.341 o 1:02.345.');return}
+ const s={id:'s'+rec.createdAt.toString(36)+Math.random().toString(36).slice(2,6),...rec};
+ S.salidas.push(s);lsSet();
+ try{await writeSalida(s);msgOk('#salSaved','Salida guardada')}catch(err){updStore();msgErr('#salSaved',err&&err.code==='quota_exceeded'?'Se llenó el espacio en la nube. Borrá salidas viejas.':'Sin conexión: quedó guardada en el teléfono y se sube sola cuando vuelva internet.')}
+ ['s_temp','s_vuelta','s_detalle','s_notas'].forEach(i=>$('#'+i).value='');$('#s_param').value='';$('#s_csv').value='';selSint=new Set();selRes='';pendingData=null;
+ renderAll();
+});
+let confirmId=null;
+function renderSalidas(){
+ $('#nSal').textContent=S.salidas.length;
+ const list=sorted();
+ if(!list.length){$('#slist').innerHTML=`<div class="empty"><b>Sin salidas todavía</b>Después de cada tanda anotá qué sentiste, qué cambiaste y cómo te fue. Con eso la pestaña Diagnóstico empieza a ordenar las recomendaciones según lo que funciona en tu kart.</div>`;$('#chartPanel').hidden=true;return}
+ const best={};for(const s of S.salidas)if(s.vuelta&&s.pista&&(!best[s.pista]||s.vuelta<best[s.pista]))best[s.pista]=s.vuelta;
+ const chrono=[...list].reverse();
+ $('#slist').innerHTML=list.map(s=>{
+  const prev=chrono.slice(0,chrono.indexOf(s)).reverse().find(x=>x.pista===s.pista&&x.vuelta&&x.condicion===s.condicion);
+  let delta='';if(s.vuelta&&prev){const d=s.vuelta-prev.vuelta;delta=`<span class="d ${d<0?'g':d>0?'b':''}">${d>0?'+':d<0?'−':'±'}${Math.abs(d).toFixed(3)}</span>`}
+  const isBest=s.vuelta&&best[s.pista]===s.vuelta;
+  const res=s.cambio?(s.resultado?`<span class="pill ${s.resultado}">${{mejoro:'Mejoró',igual:'Igual',empeoro:'Empeoró'}[s.resultado]}</span>`:'<span class="pill na">Sin resultado</span>'):'<span class="pill na">Referencia</span>';
+  const del=confirmId===s.id?`<span class="confirm">¿Borrar? <button class="btn sm danger" data-delok="${s.id}">Sí, borrar</button><button class="btn sm" data-delno>No</button></span>`:`<button class="btn sm" data-del="${s.id}">Borrar</button>`;
+  return `<div class="srow"><div class="lap"><b style="${isBest?'color:var(--best)':''}">${fmtLap(s.vuelta)}</b>${delta}</div>
+   <div style="min-width:0"><div class="meta">${fmtDate(s.fecha)} · ${esc(s.pista||'Sin pista')} · <span class="tag">${COND[s.condicion]||''}${s.tempPista?' '+esc(s.tempPista)+'°C':''}</span>${s.datos?` <button class="tag mc" data-tele="${s.id}">MyChron</button>`:''}</div>
+   <div style="margin-top:3px">${s.cambio?`<b>${esc(PARAMS[s.cambio.param]?.n||s.cambio.param)}</b>${s.cambio.detalle?': '+esc(s.cambio.detalle):''}`:'Sin cambios'} ${res}</div>
+   ${(s.sintomas||[]).length?`<div class="meta" style="margin-top:4px">Sentía: ${s.sintomas.map(id=>esc(SYMPTOMS.find(x=>x.id===id)?.t||id)).join(', ')}</div>`:''}
+   ${s.notas?`<div class="notes">${esc(s.notas)}</div>`:''}</div>
+   <div class="side">${del}</div></div>`}).join('');
+ renderChart();
+}
+$('#slist').addEventListener('click',async e=>{
+ const tl=e.target.closest('[data-tele]');if(tl){cmpB=tl.dataset.tele;cmpA=null;go('telemetria');renderCmp();scrollTo({top:0});return}
+ const d=e.target.closest('[data-del]');if(d){confirmId=d.dataset.del;renderSalidas();return}
+ if(e.target.closest('[data-delno]')){confirmId=null;renderSalidas();return}
+ const ok=e.target.closest('[data-delok]');if(ok){const id=ok.dataset.delok;S.salidas=S.salidas.filter(s=>s.id!==id);confirmId=null;lsSet();renderAll();try{await deleteSalida(id)}catch(err){updStore()}}
+});
+function renderChart(){
+ const counts={};for(const s of S.salidas)if(s.pista&&s.vuelta)counts[s.pista]=(counts[s.pista]||0)+1;
+ const pistas=Object.keys(counts).filter(p=>counts[p]>=2).sort((a,b)=>counts[b]-counts[a]);
+ if(!pistas.length){$('#chartPanel').hidden=true;return}
+ $('#chartPanel').hidden=false;
+ const sel=$('#chartPista');const cur=pistas.includes(sel.value)?sel.value:pistas[0];
+ sel.innerHTML=pistas.map(p=>`<option${p===cur?' selected':''}>${esc(p)}</option>`).join('');
+ const pts=[...S.salidas].filter(s=>s.pista===cur&&s.vuelta).sort((a,b)=>(a.fecha||'').localeCompare(b.fecha||'')||(a.createdAt||0)-(b.createdAt||0));
+ const W=640,H=200,L=64,R=16,T=16,B=30;
+ let lo=Math.min(...pts.map(p=>p.vuelta)),hi=Math.max(...pts.map(p=>p.vuelta));if(hi-lo<0.2){const m=(hi+lo)/2;lo=m-0.1;hi=m+0.1}
+ const pad=(hi-lo)*0.12;lo-=pad;hi+=pad;
+ const x=i=>pts.length===1?L+(W-L-R)/2:L+i*(W-L-R)/(pts.length-1),y=v=>T+(v-lo)/(hi-lo)*(H-T-B);
+ const bestV=Math.min(...pts.map(p=>p.vuelta)),col={mejoro:'var(--good)',igual:'var(--same)',empeoro:'var(--bad)'};
+ const ticks=[lo+pad,(lo+hi)/2,hi-pad],line=pts.map((p,i)=>`${i?'L':'M'}${x(i).toFixed(1)} ${y(p.vuelta).toFixed(1)}`).join(' ');
+ $('#chart').innerHTML=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Mejor vuelta por salida en ${esc(cur)}">
+  ${ticks.map(t=>`<line class="ax" x1="${L}" x2="${W-R}" y1="${y(t)}" y2="${y(t)}"/><text x="${L-8}" y="${y(t)+4}" text-anchor="end">${fmtLap(t)}</text>`).join('')}
+  <path class="ar" d="${line} L${x(pts.length-1)} ${H-B} L${x(0)} ${H-B} Z" opacity=".55"/><path class="ln" d="${line}"/>
+  ${pts.map((p,i)=>{const isB=p.vuelta===bestV;const c=isB?'var(--best)':(col[p.resultado]||'var(--muted)');return `<circle cx="${x(i)}" cy="${y(p.vuelta)}" r="${isB?6.5:5}" fill="${c}" stroke="var(--surface)" stroke-width="2"><title>${fmtDate(p.fecha)} · ${fmtLap(p.vuelta)}</title></circle>`}).join('')}
+  ${pts.map((p,i)=>(pts.length<=8||i===0||i===pts.length-1)?`<text x="${x(i)}" y="${H-10}" text-anchor="middle">${fmtDate(p.fecha).slice(0,5)}</text>`:'').join('')}
+ </svg>`;
+}
+$('#chartPista').addEventListener('change',renderChart);
+
+/* =============== Telemetría MyChron (CSV de Race Studio) =============== */
+function splitLine(line,del){const out=[];let cur='',q=false;for(let i=0;i<line.length;i++){const c=line[i];if(q){if(c==='"'){if(line[i+1]==='"'){cur+='"';i++}else q=false}else cur+=c}else if(c==='"')q=true;else if(c===del){out.push(cur);cur=''}else cur+=c}out.push(cur);return out.map(x=>x.trim())}
+function parseAim(text,name){
+ const lines=text.replace(/^﻿/,'').split(/\r?\n/);
+ const head60=lines.slice(0,80).join('\n');
+ const del=(head60.match(/;/g)||[]).length>=5?';':((head60.match(/\t/g)||[]).length>=5?'\t':',');
+ const num=s=>{if(s==null)return NaN;s=String(s).trim();if(!s)return NaN;if(del!==',')s=s.replace(',','.');return Number(s)};
+ const rows=lines.map(l=>splitLine(l,del));
+ const isTime=c=>/^(time|tiempo)(\s*\[?s\]?)?$/i.test(c);
+ let h=rows.findIndex(r=>r.length>=3&&r.some(isTime)&&r.some(c=>/speed|veloc|rpm/i.test(c)));
+ if(h<0)h=rows.findIndex(r=>r.length>=3&&r.some(isTime));
+ if(h<0)throw {code:'no_header'};
+ const head=rows[h],ti=head.findIndex(isTime);
+ const meta={};for(const r of rows.slice(0,h)){if(r[0])meta[r[0].toLowerCase()]=r.slice(1).filter(x=>x!=='')}
+ const find=(...res)=>{for(const re of res){const i=head.findIndex(c=>re.test(c));if(i>=0)return i}return -1};
+ const iV=find(/^gps.?speed/i,/^speed/i,/speed|veloc/i),iR=find(/^rpm$/i,/rpm/i),iLat=find(/gps.?latacc/i,/latacc|lateral/i),iW=find(/water|agua/i),iE=find(/egt|exhaust|escape/i);
+ const T=[],V=[],RP=[],LA=[],WT=[],ET=[];
+ for(let k=h+1;k<rows.length;k++){const r=rows[k];const t=num(r[ti]);if(!isFinite(t))continue;
+  T.push(t);V.push(iV>=0?num(r[iV]):NaN);RP.push(iR>=0?num(r[iR]):NaN);LA.push(iLat>=0?num(r[iLat]):NaN);WT.push(iW>=0?num(r[iW]):NaN);ET.push(iE>=0?num(r[iE]):NaN)}
+ if(T.length<20)throw {code:'no_data'};
+ const t0=T[0],tEnd=T[T.length-1];
+ const bk=Object.keys(meta).find(k=>/beacon/.test(k));
+ let beacons=bk?meta[bk].map(num).filter(b=>isFinite(b)&&b>t0&&b<=tEnd+0.01):[];
+ const bounds=[t0,...beacons];
+ const segs=[];for(let i=0;i+1<bounds.length;i++)segs.push({n:i,a:bounds[i],b:bounds[i+1],t:bounds[i+1]-bounds[i]});
+ let vueltas,cands;
+ if(segs.length){vueltas=segs.map((s,i)=>({n:i,t:+s.t.toFixed(3),out:i===0&&segs.length>1}));cands=segs.filter((s,i)=>!(i===0&&segs.length>1))}
+ else{const d=tEnd-t0;vueltas=[{n:0,t:+d.toFixed(3),out:false}];cands=d<240?[{n:0,a:t0,b:tEnd,t:d}]:[]}
+ const finite=a=>a.filter(x=>isFinite(x));
+ const mx=a=>{const f=finite(a);return f.length?Math.max(...f):null},mn=a=>{const f=finite(a);return f.length?Math.min(...f):null};
+ let mejor=null;
+ if(cands.length){
+  const b=cands.reduce((a,c)=>c.t<a.t?c:a);
+  const idx=[];for(let i=0;i<T.length;i++)if(T[i]>=b.a&&T[i]<=b.b)idx.push(i);
+  mejor={n:b.n,t:+b.t.toFixed(3),rpmMax:mx(idx.map(i=>RP[i])),rpmMin:mn(idx.map(i=>RP[i])),latMax:mx(idx.map(i=>Math.abs(LA[i])))};
+  const vs=idx.map(i=>V[i]);
+  if(finite(vs).length>idx.length*0.8){
+   const dist=[0];for(let j=1;j<idx.length;j++){const v=(isFinite(vs[j])?vs[j]:0)/3.6;dist.push(dist[j-1]+v*(T[idx[j]]-T[idx[j-1]]))}
+   const D=dist[dist.length-1],N=240,tr=[];let p=0;
+   for(let k=0;k<N;k++){const dd=k/(N-1)*D;while(p<dist.length-2&&dist[p+1]<dd)p++;const f=(dd-dist[p])/((dist[p+1]-dist[p])||1);const a=vs[p],c=vs[p+1];tr.push(isFinite(a)&&isFinite(c)?a+(c-a)*Math.max(0,Math.min(1,f)):(a||c||0))}
+   const sm=tr.map((_,i)=>{let s=0,n=0;for(let j=i-2;j<=i+2;j++)if(j>=0&&j<N){s+=tr[j];n++}return s/n});
+   const mins=[];for(let i=1;i<N-1;i++){let isMin=true;for(let j=Math.max(0,i-6);j<=Math.min(N-1,i+6);j++)if(sm[j]<sm[i]){isMin=false;break}if(isMin&&(!mins.length||i-mins[mins.length-1]>6))mins.push(i)}
+   const curvas=[];mins.forEach((i,k)=>{const lft=k?mins[k-1]:0,rgt=k<mins.length-1?mins[k+1]:N-1;const ml=Math.max(...sm.slice(lft,i+1)),mr=Math.max(...sm.slice(i,rgt+1));if(Math.min(ml,mr)-sm[i]>=5)curvas.push({pos:+(i/(N-1)).toFixed(3),v:+sm[i].toFixed(1)})});
+   curvas.forEach((c,i)=>c.c=i+1);
+   mejor.vmax=+Math.max(...sm).toFixed(1);mejor.dist=Math.round(D);mejor.traza=sm.map(x=>+x.toFixed(1));mejor.curvas=curvas;
+  }
+ }
+ let fecha='';const dm=(meta.date||[])[0]||'';const m1=dm.match(/(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{2,4})/);
+ if(m1){const y=m1[3].length===2?'20'+m1[3]:m1[3];fecha=`${y}-${m1[2].padStart(2,'0')}-${m1[1].padStart(2,'0')}`}else if(dm){const d=new Date(dm);if(!isNaN(d))fecha=d.toISOString().slice(0,10)}
+ const pista=((meta.venue||meta.track||meta.circuit||[])[0])||'';
+ return {archivo:name,fecha,pista,vueltas,mejor,aguaMax:mx(WT),egtMax:mx(ET),canales:head.filter(Boolean).slice(0,40),sinVelocidad:iV<0,importado:Date.now()};
+}
+function csvError(e){const c=e&&e.code;return c==='no_header'?'No encontré la fila de canales (Time, GPS Speed, RPM…). ¿Es un CSV exportado desde Race Studio?':c==='no_data'?'El archivo no tiene suficientes datos.':'No pude leer el archivo. Exportalo de nuevo como CSV.'}
+let teleNew=null;
+function statsHTML(d){const m=d.mejor||{};
+ const st=[['Mejor vuelta',fmtLap(m.t)],['Vel. máxima',m.vmax!=null?nf(m.vmax,1)+' km/h':'—'],['Curvas detectadas',m.curvas?String(m.curvas.length):'—'],['RPM máx.',m.rpmMax!=null?nf(m.rpmMax):'—'],['RPM mín. en vuelta',m.rpmMin!=null?nf(m.rpmMin):'—'],['Agua máx.',d.aguaMax!=null?nf(d.aguaMax,1)+' °C':'—'],['Escape máx.',d.egtMax!=null?nf(d.egtMax)+' °C':'—']];
+ return `<div class="stats">${st.map(([a,b])=>`<div class="stat"><span class="lbl">${a}</span><b>${b}</b></div>`).join('')}</div><div class="laps">${d.vueltas.map(v=>`<span class="${m.n===v.n?'best':''}${v.out?' out':''}" title="${v.out?'Vuelta de salida':''}">${v.n+1}: ${fmtLap(v.t)}</span>`).join('')}</div>`}
+function renderTeleNew(){
+ const o=$('#teleOut');if(!teleNew){o.innerHTML='';return}
+ const opts=sorted().map(s=>`<option value="${s.id}">${fmtDate(s.fecha)} · ${esc(s.pista||'Sin pista')} · ${fmtLap(s.vuelta)}${s.datos?' (ya tiene datos)':''}</option>`).join('');
+ o.innerHTML=`<div style="margin-top:16px"><div class="lbl">${esc(teleNew.archivo)}${teleNew.fecha?' · '+fmtDate(teleNew.fecha):''}</div>${statsHTML(teleNew)}
+ ${teleNew.sinVelocidad?'<p class="err">El archivo no trae velocidad: no se pueden detectar curvas. Exportá incluyendo GPS Speed.</p>':''}
+ ${teleNew.vueltas.length===1&&!teleNew.mejor?'<p class="err">No encontré marcas de vuelta. Exportá la sesión completa con balizas, o una sola vuelta.</p>':''}
+ <div class="actions"><button class="btn pri" type="button" id="teleNewSal">Usar en una salida nueva</button>${opts?`<div class="inp" style="width:auto;max-width:100%"><select id="teleTarget" aria-label="Salida existente">${opts}</select></div><button class="btn" type="button" id="teleAttach">Adjuntar a esa salida</button>`:''}<span class="saved" id="teleMsg"></span></div></div>`;
+}
+async function loadTele(file){if(!file)return;try{teleNew=parseAim(await file.text(),file.name);renderTeleNew()}catch(err){teleNew=null;$('#teleOut').innerHTML=`<p class="err">${esc(csvError(err))}</p>`}}
+$('#t_csv').addEventListener('change',e=>loadTele(e.target.files[0]));
+const drop=$('#drop');
+drop.addEventListener('dragover',e=>{e.preventDefault();drop.classList.add('over')});
+drop.addEventListener('dragleave',()=>drop.classList.remove('over'));
+drop.addEventListener('drop',e=>{e.preventDefault();drop.classList.remove('over');loadTele(e.dataTransfer.files[0])});
+$('#teleOut').addEventListener('click',async e=>{
+ if(e.target.id==='teleNewSal'){useDataInForm(teleNew);teleNew=null;renderTeleNew();go('salidas');$('#formPanel').scrollIntoView({behavior:'smooth',block:'start'});return}
+ if(e.target.id==='teleAttach'){const id=$('#teleTarget').value;const s=S.salidas.find(x=>x.id===id);if(!s)return;
+  s.datos=teleNew;if(!s.vuelta&&teleNew.mejor){s.vuelta=teleNew.mejor.t;s.vueltaTxt=teleNew.mejor.t.toFixed(3)}
+  lsSet();try{await writeSalida(s);msgOk('#teleMsg','Datos adjuntados')}catch(err){updStore();msgErr('#teleMsg','Sin conexión: se sube sola cuando vuelva internet.')}
+  cmpB=id;cmpA=null;teleNew=null;renderAll();}
+});
+let cmpA=null,cmpB=null;
+function renderCmp(){
+ const withD=sorted().filter(s=>s.datos&&s.datos.mejor);
+ const box=$('#cmp');
+ if(!withD.length){box.innerHTML=`<div class="empty" style="margin-top:12px"><b>Sin datos todavía</b>Subí el CSV de una salida. Con dos salidas en la misma pista vas a ver dónde ganaste o perdiste velocidad.</div>`;return}
+ if(!withD.find(s=>s.id===cmpB))cmpB=withD[0].id;
+ const B=withD.find(s=>s.id===cmpB);
+ if(cmpA!=='__none'&&!withD.find(s=>s.id===cmpA&&s.id!==cmpB)){const same=withD.find(s=>s.id!==cmpB&&s.pista===B.pista&&(s.fecha||'')<=(B.fecha||''));cmpA=(same||withD.find(s=>s.id!==cmpB)||{}).id||null}
+ const A=withD.find(s=>s.id===cmpA);
+ const opt=sel=>withD.map(s=>`<option value="${s.id}"${s.id===sel?' selected':''}>${fmtDate(s.fecha)} · ${esc(s.pista||'Sin pista')} · ${fmtLap(s.datos.mejor.t)}${s.cambio?' · '+esc(PARAMS[s.cambio.param]?.n||''):''}</option>`).join('');
+ let h=`<div class="fgrid"><div class="f"><label for="cmpB">Salida a analizar</label><div class="inp"><select id="cmpB">${opt(cmpB)}</select></div></div>${withD.length>1?`<div class="f"><label for="cmpA">Comparar contra</label><div class="inp"><select id="cmpA"><option value="">Ninguna</option>${opt(cmpA)}</select></div></div>`:''}</div>`;
+ if(B.cambio)h+=`<p class="sub" style="margin-top:10px">Cambio en esta salida: <b>${esc(PARAMS[B.cambio.param]?.n||'')}</b>${B.cambio.detalle?': '+esc(B.cambio.detalle):''}</p>`;
+ h+=statsHTML(B.datos);
+ const mb=B.datos.mejor,ma=A?.datos?.mejor;
+ if(mb.traza){
+  const W=720,H=260,L=46,R=12,T=14,Bt=28;
+  const all=[...mb.traza,...(ma?.traza||[])];let lo=Math.min(...all),hi=Math.max(...all);lo=Math.floor((lo-5)/10)*10;hi=Math.ceil((hi+3)/10)*10;
+  const x=f=>L+f*(W-L-R),y=v=>T+(hi-v)/(hi-lo)*(H-T-Bt);
+  const path=tr=>tr.map((v,i)=>`${i?'L':'M'}${x(i/(tr.length-1)).toFixed(1)} ${y(v).toFixed(1)}`).join(' ');
+  const ticks=[];for(let t=lo;t<=hi;t+=hi-lo>60?20:10)ticks.push(t);
+  let svg=`<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Velocidad a lo largo de la vuelta">${ticks.map(t=>`<line class="ax" x1="${L}" x2="${W-R}" y1="${y(t)}" y2="${y(t)}"/><text x="${L-6}" y="${y(t)+4}" text-anchor="end">${t}</text>`).join('')}
+   ${ma?.traza?`<path class="ln2" d="${path(ma.traza)}"/>`:''}<path class="ln" d="${path(mb.traza)}"/>
+   ${(mb.curvas||[]).map(c=>`<text class="cl" x="${x(c.pos)}" y="${Math.min(H-Bt-4,y(c.v)+16)}" text-anchor="middle">${c.c}</text>`).join('')}
+   <text x="${L}" y="${H-8}">largada</text><text x="${W-R}" y="${H-8}" text-anchor="end">llegada</text><text x="${L+4}" y="${T+10}">km/h</text></svg>`;
+  h+=`<div class="chart" style="margin-top:14px">${svg}</div><div class="legend"><span><i style="background:var(--accent)"></i>${fmtDate(B.fecha)} · ${fmtLap(mb.t)}</span>${ma?`<span><i style="background:var(--muted)"></i>${fmtDate(A.fecha)} · ${fmtLap(ma.t)} (punteada)</span>`:''}</div>`;
+  if(mb.curvas&&mb.curvas.length){
+   const match=c=>{if(!ma?.curvas)return null;let best=null;for(const k of ma.curvas){const d=Math.abs(k.pos-c.pos);if(d<0.04&&(!best||d<Math.abs(best.pos-c.pos)))best=k}return best};
+   h+=`<div class="tbl"><table><thead><tr><th>Curva</th><th>Posición</th><th>Vel. mínima</th>${ma?'<th>Antes</th><th>Diferencia</th>':''}</tr></thead><tbody>${mb.curvas.map(c=>{const a=match(c);const d=a?c.v-a.v:null;
+    return `<tr><td>${c.c}</td><td>${Math.round(c.pos*100)}% de la vuelta</td><td>${nf(c.v,1)} km/h</td>${ma?`<td>${a?nf(a.v,1)+' km/h':'—'}</td><td class="d ${d==null?'':d>0.4?'g':d<-0.4?'b':''}">${d==null?'—':(d>0?'+':d<0?'−':'±')+nf(Math.abs(d),1)}</td>`:''}</tr>`}).join('')}</tbody></table></div>`;
+   if(ma&&A.pista!==B.pista)h+=`<p class="err">Ojo: son pistas distintas, la comparación por curva no tiene sentido.</p>`;
+  }
+ }
+ box.innerHTML=h;
+}
+$('#cmp').addEventListener('change',e=>{if(e.target.id==='cmpB'){cmpB=e.target.value;cmpA=null}if(e.target.id==='cmpA')cmpA=e.target.value||'__none';renderCmp()});
+
+/* =============== Ingeniero (Claude) =============== */
+const PRESETS=['¿Qué cambio pruebo en la próxima salida?','Resumí qué aprendimos de mi kart hasta ahora','Mirando la telemetría, ¿en qué curvas pierdo y qué ajuste ayudaría?','¿La relación está bien según las RPM?','¿Qué setup base me recomendás para lluvia?'];
+$('#presets').innerHTML=PRESETS.map(p=>`<button type="button" class="chip" data-preset="${esc(p)}">${esc(p)}</button>`).join('');
+$('#presets').addEventListener('click',e=>{const b=e.target.closest('[data-preset]');if(b){$('#q').value=b.dataset.preset;$('#q').focus()}});
+let sample=null,ctl=null;
+function readable(st){const o={};for(const k in NUM)o[NUM[k].n]=fmtVal(k,st[k]);for(const [k,l] of TEXT_FIELDS)if(st[k])o[l]=st[k];if(st.notas)o.notas=st.notas;return o}
+function teleSummary(d){if(!d)return null;const m=d.mejor||{};return {vueltas:d.vueltas.filter(v=>!v.out).map(v=>v.t),mejorVuelta:m.t,velMaxKmh:m.vmax,curvas:(m.curvas||[]).map(c=>({curva:c.c,posicionPct:Math.round(c.pos*100),velMinKmh:c.v})),rpmMax:m.rpmMax,rpmMinEnVuelta:m.rpmMin,aguaMaxC:d.aguaMax,escapeMaxC:d.egtMax}}
+function buildPrompt(q){
+ const sal=sorted().slice(0,25).map(s=>({fecha:s.fecha,pista:s.pista,condicion:s.condicion,tempPista:s.tempPista,mejorVuelta:fmtLap(s.vuelta),sintomas:(s.sintomas||[]).map(id=>SYMPTOMS.find(x=>x.id===id)?.t||id),cambio:s.cambio?{que:PARAMS[s.cambio.param]?.n,detalle:s.cambio.detalle}:'ninguno (referencia)',resultado:s.resultado||null,notas:s.notas||null,setupEnEsaSalida:readable(normSetup(s.setup)),telemetriaMyChron:teleSummary(s.datos)}));
+ return `Sos un ingeniero de pista de karting con mucha experiencia en puesta a punto de chasis (karts sin suspensión: trochas, caster, camber, Ackermann, convergencia, alturas, dureza de eje, bancada central, masas traseras, barras, presiones, asiento y tirantes) y en lectura de datos AiM MyChron.
+Respondé en español rioplatense, claro y concreto, en texto plano sin tablas ni markdown pesado. Priorizá cambios de a uno, con dirección, magnitud aproximada y por qué. Apoyate en los datos reales del piloto cuando existan: qué cambios mejoraron o empeoraron, bajo qué condición, y la telemetría (velocidad mínima por curva comparada entre salidas en la misma pista, velocidad máxima, RPM mínimas y máximas para evaluar la relación, temperaturas). Las curvas se identifican por su número y su posición en % de la vuelta. Si los datos no alcanzan para concluir, decilo y sugerí qué medir o anotar en la próxima salida. No inventes datos que no están.
+
+CONDICIÓN QUE EL PILOTO TIENE SELECCIONADA: ${COND[S.cond]}
+
+SETUP ACTUAL DEL KART (las posiciones son relativas a la escala del piloto):
+${JSON.stringify(readable(S.setup),null,1)}
+
+SALIDAS REGISTRADAS (la más reciente primero, ${sal.length} de ${S.salidas.length}):
+${sal.length?JSON.stringify(sal):'Todavía no hay salidas registradas.'}
+
+PREGUNTA DEL PILOTO:
+${q}`}
+$('#ask').addEventListener('click',async()=>{
+ const q=$('#q').value.trim()||PRESETS[0],out=$('#answer');
+ if(!sample){out.className='answer';out.textContent='Todavía no está disponible el análisis con Claude en esta vista. Esperá unos segundos y probá de nuevo.';return}
+ ctl=new AbortController();$('#ask').disabled=true;$('#stop').hidden=false;out.className='answer wait';out.textContent='Pensando…';$('#askInfo').textContent='';
+ try{const r=await sample(buildPrompt(q),{signal:ctl.signal,cache:false,onText:({text})=>{out.className='answer';out.textContent=text}});if(r.truncated)$('#askInfo').textContent='Respuesta cortada. Pedí algo más puntual.'}
+ catch(e){out.className='answer';out.textContent=e&&e.text?e.text:'';const code=e&&e.code;
+  if(['not_granted','sampling_disabled','not_declared','capability_disabled','capability_removed'].includes(code)){$('#noSample').hidden=false;out.textContent='No hay permiso para usar Claude desde esta planilla en esta vista.'}
+  else if(code==='rate_limited')$('#askInfo').textContent='Demasiadas consultas seguidas. Probá en un rato.';
+  else if(code==='session_expired')$('#askInfo').textContent='Tenés que volver a iniciar sesión en Claude.';
+  else if(code==='prompt_too_large')$('#askInfo').textContent='Hay demasiados datos. Borrá salidas viejas o preguntá algo más puntual.';
+  else if(code!=='cancelled')$('#askInfo').textContent='Falló la consulta. Probá de nuevo.'}
+ finally{$('#ask').disabled=false;$('#stop').hidden=true}
+});
+$('#stop').addEventListener('click',()=>ctl&&ctl.abort());
+
+/* =============== Pestañas y arranque =============== */
+const TABS=['diagnostico','setup','salidas','telemetria','ingeniero'];
+function go(t){if(!TABS.includes(t))t='diagnostico';TABS.forEach(x=>{$('#p-'+x).hidden=x!==t;$('#t-'+x).setAttribute('aria-selected',x===t)});try{sessionStorage.setItem('pc.tab',t)}catch(e){}}
+document.querySelector('nav.tabs').addEventListener('click',e=>{const b=e.target.closest('[data-tab]');if(b){go(b.dataset.tab);scrollTo({top:0})}});
+function renderAll(){renderDiag();renderSalForm();renderSalidas();renderCmp()}
+renderSliders();renderTextFields();renderSim(true);renderAll();
+let start=(location.hash||'').slice(1);if(!TABS.includes(start)){try{start=sessionStorage.getItem('pc.tab')||'diagnostico'}catch(e){start='diagnostico'}}
+go(start);
+
+(async()=>{
+ if(!window.claude||!window.claude.use)return;
+ claude.use('sample').then(s=>{sample=s;if(!s)$('#noSample').hidden=false});
+ const d=await claude.use('db').catch(()=>null);
+ if(!d)return;
+ db=d;mode='db';
+ updStore();
+ let firstServer=true;
+ db.collection('salidas').onSnapshot(async snap=>{
+  const remote=snap.docs.map(x=>({id:x.id,...x.data()}));
+  if(firstServer&&!snap.metadata.fromCache){firstServer=false;
+   /* versión anterior de la planilla: sube lo que solo estaba en el teléfono */
+   if(legacy){const ids=new Set(remote.map(r=>r.id));S.salidas.filter(s=>!ids.has(s.id)).forEach(s=>markSal(s.id));legacy=false;lsSet()}}
+  /* la nube manda, salvo lo que todavía no se subió desde este teléfono */
+  const pendSal=new Set(P.sal),pendDel=new Set(P.del);
+  const local=new Map(S.salidas.map(s=>[s.id,s]));
+  const merged=remote.filter(r=>!pendDel.has(r.id)&&!pendSal.has(r.id));
+  for(const id of pendSal){const s=local.get(id);if(s)merged.push(s)}
+  S.salidas=merged;lsSet();renderAll();updStore();
+  if(!snap.metadata.fromCache)syncPending();
+ },()=>{});
+ db.doc('kart/setup').onSnapshot(async snap=>{
+  const remoteAt=snap.exists?(snap.data().updatedAt||0):0;
+  if(P.setup&&(S.setup.updatedAt||0)>=remoteAt){
+   /* el setup del teléfono es más nuevo: no lo pisa, lo sube */
+   if(!snap.metadata.fromCache)syncPending();
+  }else if(snap.exists){P.setup=false;const dirty=diff(S.setup,draft).length>0;S.setup=normSetup(snap.data());lsSet();if(!dirty)draft={...S.setup};
+   if(!document.querySelector('#p-setup').contains(document.activeElement))renderTextFields();renderSim(!dirty);renderDiag()}
+  else if(!setupLoaded&&!snap.metadata.fromCache&&S.setup.updatedAt){P.setup=true;syncPending()}
+  setupLoaded=true;updStore();
+ },()=>{});
+ addEventListener('online',()=>syncPending());
+ document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')syncPending()});
+ setInterval(()=>{if(pendCount())syncPending()},60000);
+})();
+</script>
+
+</body>
+</html>
